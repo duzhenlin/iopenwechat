@@ -1,8 +1,13 @@
 <?php
+
 namespace IopenWechat\Core;
 
 use IopenWechat\Core\Helper\ArrayHelper;
 
+/**
+ * Class Collection
+ * @package IopenWechat\Core
+ */
 class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable, \Serializable
 {
     /**
@@ -12,6 +17,10 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonS
      */
     protected $items = [];
 
+    /**
+     * Collection constructor.
+     * @param array $items
+     */
     public function __construct(array $items = [])
     {
         foreach ($items as $key => $value) {
@@ -29,9 +38,11 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonS
         return $this->has($offset);
     }
 
+
     /**
      * 实现ArrayAccess接口方法
      * @param mixed $offset
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
@@ -54,7 +65,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonS
      */
     public function offsetUnset($offset)
     {
-        if($this->offsetExists($offset)){
+        if ($this->offsetExists($offset)) {
             $this->forget($offset);
         }
     }
@@ -67,59 +78,86 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonS
         return count($this->items);
     }
 
+
     /**
      * 实现IteratorAggregate接口方法
+     * @return \ArrayIterator
      */
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
     }
 
+
     /**
      * 实现JsonSerialize接口方法
+     * @return array
      */
     public function jsonSerialize()
     {
         return $this->items;
     }
 
+
     /**
      * 实现Serializable接口方法
+     * @return string
      */
     public function serialize()
     {
         return serialize($this->items);
     }
 
+
     /**
      * 实现Serializable接口方法
      * @param string $serialized
+     * @return mixed
      */
     public function unserialize($serialized)
     {
         return $this->items = unserialize($serialized);
     }
 
+    /**
+     * @param $key
+     * @param $value
+     */
     public function set($key, $value)
     {
         ArrayHelper::set($this->items, $key, $value);
     }
 
+    /**
+     * @param      $key
+     * @param null $default
+     * @return mixed
+     */
     public function get($key, $default = null)
     {
         return ArrayHelper::get($this->items, $key, $default);
     }
 
+    /**
+     * @param $key
+     * @return bool
+     */
     public function has($key)
     {
         return !is_null(ArrayHelper::get($this->items, $key));
     }
 
+    /**
+     * @param $key
+     */
     public function forget($key)
     {
         ArrayHelper::forget($this->items, $key);
     }
 
+    /**
+     * @return array
+     */
     public function getAll()
     {
         return $this->items;
@@ -133,43 +171,59 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonS
     public function only(array $keys = [])
     {
         $result = [];
-        if(!$keys || !$this->items) return $result;
+        if (!$keys || !$this->items) {
+            return $result;
+        }
 
-        foreach($keys as $key){
+        foreach ($keys as $key) {
             $value = $this->get($key);
-            if(!is_null($value)){
+            if (!is_null($value)) {
                 $result[$key] = $value;
             }
         }
         return $result;
     }
 
+
     /**
      * 获取不包含指定键数组
      * @param array $keys
+     * @return array|static
      */
     public function except(array $keys = [])
     {
         $result = [];
-        if(!$keys || !$this->items) return $result;
+        if (!$keys || !$this->items) {
+            return $result;
+        }
 
         $result = ArrayHelper::except($this->items, $keys);
         return new static($result);
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function merge(array $data = [])
     {
-        foreach($data as $key => $val){
+        foreach ($data as $key => $val) {
             $this->set($key, $val);
         }
         return $this->getAll();
     }
 
+    /**
+     * @return mixed
+     */
     public function first()
     {
         return reset($this->items);
     }
 
+    /**
+     * @return mixed
+     */
     public function last()
     {
         $end = end($this->items);
@@ -177,20 +231,31 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonS
         return $end;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return $this->getAll();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->toJson();
     }
 
+    /**
+     * @param int $option
+     * @return string
+     */
     public function toJson($option = JSON_UNESCAPED_UNICODE)
     {
         return json_encode($this->getAll(), $option);
     }
+
     /**
      * Get a data by key.
      *

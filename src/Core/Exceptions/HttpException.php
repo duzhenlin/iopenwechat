@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * HttpException.php.
  *
@@ -10,6 +8,7 @@
  * @link      https://github.com/overtrue
  * @link      http://overtrue.me
  */
+
 namespace IopenWechat\Core\Exceptions;
 
 use IopenWechat\Core\Exception;

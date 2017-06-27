@@ -14,6 +14,9 @@ abstract class AbstractAPI
     private $_http;
     protected $cache;
 
+    /**
+     * @return Cache|FilesystemCache
+     */
     protected function getCacheHandler()
     {
         if (!$this->cache instanceof Cache) {
@@ -22,6 +25,9 @@ abstract class AbstractAPI
         return $this->cache;
     }
 
+    /**
+     * @return Http
+     */
     protected function getHttp()
     {
         if (!$this->_http) {
@@ -38,6 +44,11 @@ abstract class AbstractAPI
         return $this->_http;
     }
 
+    /**
+     * @param       $method
+     * @param array $args
+     * @return Collection
+     */
     public function parseJSON($method, array $args)
     {
         $http = $this->getHttp();
@@ -49,11 +60,10 @@ abstract class AbstractAPI
         return new Collection($contents);
     }
 
+
     /**
-     * Check the array data errors, and Throw exception when the contents contains error.
-     *
-     * @param  array                                       $contents
-     * @throws \OpenWechat\Core\Exceptions\HttpException
+     * @param array $contents
+     * @throws HttpException
      */
     protected function checkAndThrow(array $contents)
     {
@@ -77,6 +87,9 @@ abstract class AbstractAPI
         $this->_http->addMiddleware($this->accessTokenMiddleware());
     }
 
+    /**
+     * @return callable
+     */
     protected function retryMiddleware()
     {
         return Middleware::retry(function (
@@ -100,6 +113,9 @@ abstract class AbstractAPI
         });
     }
 
+    /**
+     * @return \Closure
+     */
     protected function accessTokenMiddleware()
     {
         return function (callable $handler) {

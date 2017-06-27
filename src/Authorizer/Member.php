@@ -1,5 +1,7 @@
 <?php
+
 namespace IopenWechat\Authorizer;
+
 use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Server\AccessToken;
 
@@ -42,9 +44,11 @@ class Member extends AbstractAPI
         $this->access_token = $access_token;
     }
 
+
     /**
      * 获取授权方的公众号帐号基本信息
-     * @param string $authorizer_appid 授权方appid
+     * @param $authorizer_appid
+     * @return \IopenWechat\Core\Collection
      */
     public function getBaseInfo($authorizer_appid)
     {
@@ -65,9 +69,10 @@ class Member extends AbstractAPI
      * @param string $authorizer_appid 授权方appid
      * @param string $option_name 选项名称，location_report(地理位置上报选项)，voice_recognize（语音识别开关选项），customer_service（多客服开关选项）
      * 对应的值含义：
-     * location_report(地理位置上报选项)	0	无上报    1	进入会话时上报    2	每5s上报
-     * voice_recognize（语音识别开关选项）	0	关闭语音识别    1	开启语音识别
-     * customer_service（多客服开关选项）	0	关闭多客服    1	开启多客服
+     * location_report(地理位置上报选项)    0    无上报    1    进入会话时上报    2    每5s上报
+     * voice_recognize（语音识别开关选项）    0    关闭语音识别    1    开启语音识别
+     * customer_service（多客服开关选项）    0    关闭多客服    1    开启多客服
+     * @return \IopenWechat\Core\Collection
      */
     public function getSettingInfo($authorizer_appid, $option_name)
     {
@@ -88,11 +93,12 @@ class Member extends AbstractAPI
      * 设置授权方的选项设置信息
      * @param string $authorizer_appid 授权方appid
      * @param string $option_name 选项名称，location_report(地理位置上报选项)，voice_recognize（语音识别开关选项），customer_service（多客服开关选项）
-     * @param int $option_value 选项值
+     * @param int    $option_value 选项值
      * 对应的值含义：
-     * location_report(地理位置上报选项)	0	无上报    1	进入会话时上报    2	每5s上报
-     * voice_recognize（语音识别开关选项）	0	关闭语音识别    1	开启语音识别
-     * customer_service（多客服开关选项）	0	关闭多客服    1	开启多客服
+     * location_report(地理位置上报选项)    0    无上报    1    进入会话时上报    2    每5s上报
+     * voice_recognize（语音识别开关选项）    0    关闭语音识别    1    开启语音识别
+     * customer_service（多客服开关选项）    0    关闭多客服    1    开启多客服
+     * @return \IopenWechat\Core\Collection
      */
     public function setSettingInfo($authorizer_appid, $option_name, $option_value)
     {

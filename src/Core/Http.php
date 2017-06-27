@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Core;
 
 use GuzzleHttp\Client as HttpClient;
@@ -52,8 +53,8 @@ class Http
     /**
      * GET request.
      *
-     * @param  string              $url
-     * @param  array               $options
+     * @param  string $url
+     * @param  array  $options
      * @throws HttpException
      * @return ResponseInterface
      */
@@ -66,8 +67,8 @@ class Http
     /**
      * POST request.
      *
-     * @param  string              $url
-     * @param  array|string        $options
+     * @param  string       $url
+     * @param  array|string $options
      * @throws HttpException
      * @return ResponseInterface
      */
@@ -81,9 +82,9 @@ class Http
     /**
      * JSON request.
      *
-     * @param  string              $url
-     * @param  string|array        $options
-     * @param  int                 $encodeOption
+     * @param  string       $url
+     * @param  string|array $options
+     * @param  int          $encodeOption
      * @throws HttpException
      * @return ResponseInterface
      */
@@ -97,9 +98,9 @@ class Http
     /**
      * Upload file.
      *
-     * @param  string              $url
-     * @param  array               $files
-     * @param  array               $form
+     * @param  string $url
+     * @param  array  $files
+     * @param  array  $form
      * @throws HttpException
      * @return ResponseInterface
      */
@@ -109,7 +110,7 @@ class Http
 
         foreach ($files as $name => $path) {
             $multipart[] = [
-                'name'     => $name,
+                'name' => $name,
                 'contents' => fopen($path, 'r'),
             ];
         }
@@ -174,9 +175,9 @@ class Http
     /**
      * Make a request.
      *
-     * @param  string              $url
-     * @param  string              $method
-     * @param  array               $options
+     * @param  string $url
+     * @param  string $method
+     * @param  array  $options
      * @throws HttpException
      * @return ResponseInterface
      */
@@ -194,10 +195,11 @@ class Http
         return $response;
     }
 
+
     /**
-     * @param  \Psr\Http\Message\ResponseInterface|string  $body
-     * @throws \OpenWechat\Core\Exceptions\HttpException
-     * @return mixed
+     * @param $body
+     * @return bool|mixed
+     * @throws HttpException
      */
     public function parseJSON($body)
     {
