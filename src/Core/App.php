@@ -34,6 +34,7 @@ class App extends Container
         ServiceProviders\MessageServiceProvider::class,
         ServiceProviders\UserServiceProvider::class,
         ServiceProviders\JsApiServiceProvider::class,
+        ServiceProviders\StatsServiceProvider::class,
         ServiceProviders\StaffServiceProvider::class,
         ServiceProviders\MaterialServiceProvider::class,
         ServiceProviders\MenuServiceProvider::class,
