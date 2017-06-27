@@ -355,6 +355,6 @@ class Stats extends AbstractAPI
         if (!empty($ext)) {
             $params = array_merge($params, $ext);
         }
-        return $this->parseJSON('json', [$api . $access_token, $params]);
+        return $this->parseJSON('json', [$api . '?access_token=' . $access_token, $params]);
     }
 }
