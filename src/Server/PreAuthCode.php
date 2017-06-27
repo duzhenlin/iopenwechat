@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Server;
 
 use Doctrine\Common\Cache\Cache;
@@ -20,14 +21,14 @@ class PreAuthCode extends AbstractAPI
     /**
      * 获取预授权码
      * @param string $access_token 第三方平台component_access_token
-     * @param bool $forceRefresh 是否强制刷新
+     * @param bool   $forceRefresh 是否强制刷新
      * @return false|mixed|null
      */
     public function getCode($access_token, $forceRefresh = false)
     {
         $cacheKey = $this->codePrefix . $this->appid;
         $preAuthCode = $this->getCacheHandler()->fetch($cacheKey);
-        if(!$preAuthCode || $forceRefresh){
+        if (!$preAuthCode || $forceRefresh) {
             $preAuthCode = $this->getPreAuthCode($access_token);
         }
         return $preAuthCode;

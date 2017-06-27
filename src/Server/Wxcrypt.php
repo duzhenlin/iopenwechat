@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Server;
 
 class Wxcrypt
@@ -19,15 +20,16 @@ class Wxcrypt
         $this->encodingAesKey = $encodingAesKey;
         $this->appId = $appId;
     }
+
     /**
-	*验证URL
-    *@param sMsgSignature: 签名串，对应URL参数的msg_signature
-    *@param sTimeStamp: 时间戳，对应URL参数的timestamp
-    *@param sNonce: 随机串，对应URL参数的nonce
-    *@param sEchoStr: 随机串，对应URL参数的echostr
-    *@param sReplyEchoStr: 解密之后的echostr，当return返回0时有效
-    *@return：成功0，失败返回对应的错误码
-	*/
+     *验证URL
+     * @param sMsgSignature : 签名串，对应URL参数的msg_signature
+     * @param sTimeStamp : 时间戳，对应URL参数的timestamp
+     * @param sNonce : 随机串，对应URL参数的nonce
+     * @param sEchoStr : 随机串，对应URL参数的echostr
+     * @param sReplyEchoStr : 解密之后的echostr，当return返回0时有效
+     * @return：成功0，失败返回对应的错误码
+     */
     public function VerifyURL($sMsgSignature, $sTimeStamp, $sNonce, $sEchoStr, &$sReplyEchoStr)
     {
         if (strlen($this->encodingAesKey) != 43) {
@@ -57,6 +59,7 @@ class Wxcrypt
 
         return ErrorCode::$OK;
     }
+
     /**
      * 将公众平台回复用户的消息加密打包.
      * <ol>
@@ -221,9 +224,9 @@ class XMLParse
             $array_a = $xml->getElementsByTagName('ToUserName');
             $encrypt = $array_e->item(0)->nodeValue;
 
-            if($array_a->item(0) instanceof \DOMElement){
+            if ($array_a->item(0) instanceof \DOMElement) {
                 $tousername = $array_a->item(0)->nodeValue;
-            }else{
+            } else {
                 $tousername = '';
             }
             return array(0, $encrypt, $tousername);
@@ -378,8 +381,9 @@ class Prpcrypt
             $pkc_encoder = new PKCS7Encoder;
             $result = $pkc_encoder->decode($decrypted);
             //去除16位随机字符串,网络字节序和AppId
-            if (strlen($result) < 16)
+            if (strlen($result) < 16) {
                 return "";
+            }
             $content = substr($result, 16, strlen($result));
             $len_list = unpack("N", substr($content, 0, 4));
             $xml_len = $len_list[1];
@@ -389,8 +393,9 @@ class Prpcrypt
             //print $e;
             return array(ErrorCode::$IllegalBuffer, null);
         }
-        if ($from_appid != $appid)
+        if ($from_appid != $appid) {
             return array(ErrorCode::$ValidateAppidError, null);
+        }
         return array(0, $xml_content);
 
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Server;
 
 use IopenWechat\Core\AbstractAPI;
@@ -8,6 +9,7 @@ use Pimple\Container;
 class EventNotice extends AbstractAPI
 {
     protected $container;
+
     public function __construct(Container $pimple)
     {
         $this->container = $pimple;
@@ -28,20 +30,21 @@ class EventNotice extends AbstractAPI
             $this->container->request->getContent(false),
             $decryptMsg
         );
-        if(!$errCode){//成功解密
+        if (!$errCode) {//成功解密
             $this->container->xml->setXml($decryptMsg);
             $infoType = $this->container->xml->getValue('InfoType');
             $xmlTimestamp = $this->container->xml->getValue('CreateTime');
-            if(method_exists($this, $infoType)){
+            if (method_exists($this, $infoType)) {
                 $result = $this->$infoType($infoType);
                 $result['createTime'] = $xmlTimestamp;
             };
             $result = $result ?: true;
-        }else{
+        } else {
             $result = false;
         }
         return $result;
     }
+
     /**
      * 处理通知推送的tikect，需要输出success终止
      * @param string $infoType 通知类型

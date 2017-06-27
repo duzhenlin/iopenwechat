@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Server;
 
 use Doctrine\Common\Cache\Cache;
@@ -13,6 +14,7 @@ class AccessToken extends AbstractAPI
     protected $cache;
     protected $ticketCacheKey;
     protected $tokenPrefix;
+
     /**
      * Constructor.
      *
@@ -23,11 +25,11 @@ class AccessToken extends AbstractAPI
      */
     public function __construct($appId, $secret, Cache $cache = null, $cacheKey = null)
     {
-        $this->appId          = $appId;
-        $this->secret         = $secret;
-        $this->cache          = $cache;
+        $this->appId = $appId;
+        $this->secret = $secret;
+        $this->cache = $cache;
         $this->ticketCacheKey = $cacheKey;
-        $this->tokenPrefix    = 'sinre.IopenWechat.access_token.';
+        $this->tokenPrefix = 'sinre.IopenWechat.access_token.';
     }
 
     /**
@@ -37,26 +39,27 @@ class AccessToken extends AbstractAPI
     protected function getAccessToken()
     {
         $params = [
-            'component_appid'         => $this->appId,
-            'component_appsecret'     => $this->secret,
+            'component_appid' => $this->appId,
+            'component_appsecret' => $this->secret,
             'component_verify_ticket' => $this->getCacheHandler()->fetch($this->ticketCacheKey),
         ];
         $access_token = $this->parseJSON('post', [self::COMPONENT_ACCESS_TOKEN, json_encode($params)]);
 
         $cacheKey = $this->tokenPrefix . $this->appId;
-        $this->getCacheHandler()->save($cacheKey, $access_token['component_access_token'], $access_token['expires_in'] - 1500);
+        $this->getCacheHandler()->save($cacheKey, $access_token['component_access_token'],
+            $access_token['expires_in'] - 1500);
 
         return $access_token['component_access_token'];
     }
 
     /**
      * 获取第三方平台component_access_token
-     * @param  bool               $forceRefresh 强制刷新
+     * @param  bool $forceRefresh 强制刷新
      * @return false|mixed|null
      */
     public function getCacheToken($forceRefresh = false)
     {
-        $cacheKey     = $this->tokenPrefix . $this->appId;
+        $cacheKey = $this->tokenPrefix . $this->appId;
         $access_token = $this->getCacheHandler()->fetch($cacheKey);
 
         if (!$access_token || $forceRefresh) {

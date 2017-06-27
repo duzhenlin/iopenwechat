@@ -43,14 +43,11 @@ class MessageBuilder
         $this->staff = $staff;
     }
 
+
     /**
      * Set message to send.
-     *
-     * @param string|AbstractMessage $message
-     *
-     * @return MessageBuilder
-     *
-     * @throws InvalidArgumentException
+     * @param $message
+     * @return $this
      */
     public function message($message)
     {
