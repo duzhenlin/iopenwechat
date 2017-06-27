@@ -7,7 +7,7 @@
 
 1. PHP >= 5.5.9
 2. **[composer](https://getcomposer.org/)**
-3. openssl 拓展
+3. openssl 扩展
 
 > SDK 对所使用的框架并无特别要求
 
