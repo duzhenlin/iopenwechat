@@ -57,6 +57,10 @@ class Stats extends AbstractAPI
 
     protected $auth;
 
+    public function __construct($auth)
+    {
+        $this->auth = $auth;
+    }
 
     /**
      * 获取用户增减数据.
