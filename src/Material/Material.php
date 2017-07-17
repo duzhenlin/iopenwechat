@@ -1,23 +1,5 @@
 <?php
 
-/*
- * This file is part of the overtrue/wechat.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
-/**
- * Material.php.
- *
- * @author    overtrue <i@overtrue.me>
- * @copyright 2015 overtrue <i@overtrue.me>
- *
- * @link      https://github.com/overtrue
- * @link      http://overtrue.me
- */
 namespace IopenWechat\Material;
 
 use IopenWechat\Core\AbstractAPI;
@@ -36,23 +18,25 @@ class Material extends AbstractAPI
      */
     protected $allowTypes = ['image', 'voice', 'video', 'thumb', 'news_image'];
 
-    const API_GET               = 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=';
-    const API_UPLOAD            = 'https://api.weixin.qq.com/cgi-bin/material/add_material';
-    const API_DELETE            = 'https://api.weixin.qq.com/cgi-bin/material/del_material';
-    const API_STATS             = 'https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=';
-    const API_LISTS             = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=';
-    const API_NEWS_UPLOAD       = 'https://api.weixin.qq.com/cgi-bin/material/add_news';
-    const API_NEWS_UPDATE       = 'https://api.weixin.qq.com/cgi-bin/material/update_news';
+    const API_GET = 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=';
+    const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_material';
+    const API_DELETE = 'https://api.weixin.qq.com/cgi-bin/material/del_material';
+    const API_STATS = 'https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=';
+    const API_LISTS = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=';
+    const API_NEWS_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_news';
+    const API_NEWS_UPDATE = 'https://api.weixin.qq.com/cgi-bin/material/update_news';
     const API_NEWS_IMAGE_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg';
     protected $auth;
+
     public function __construct($auth)
     {
         $this->auth = $auth;
     }
+
     /**
      * Upload image.
      *
-     * @param  string   $path
+     * @param  string $path
      * @return string
      */
     public function uploadImage($path)
@@ -63,7 +47,7 @@ class Material extends AbstractAPI
     /**
      * Upload voice.
      *
-     * @param  string   $path
+     * @param  string $path
      * @return string
      */
     public function uploadVoice($path)
@@ -74,7 +58,7 @@ class Material extends AbstractAPI
     /**
      * Upload thumb.
      *
-     * @param  string   $path
+     * @param  string $path
      * @return string
      */
     public function uploadThumb($path)
@@ -85,9 +69,9 @@ class Material extends AbstractAPI
     /**
      * Upload video.
      *
-     * @param  string   $path
-     * @param  string   $title
-     * @param  string   $description
+     * @param  string $path
+     * @param  string $title
+     * @param  string $description
      * @return string
      */
     public function uploadVideo($path, $title, $description)
@@ -95,7 +79,7 @@ class Material extends AbstractAPI
         $params = [
             'description' => json_encode(
                 [
-                    'title'        => $title,
+                    'title' => $title,
                     'introduction' => $description,
                 ], JSON_UNESCAPED_UNICODE),
         ];
@@ -115,33 +99,40 @@ class Material extends AbstractAPI
             $articles = [$articles];
         }
 
-        $params = ['articles' => array_map(function ($article) {
-            if ($article instanceof Article) {
-                return $article->only([
-                    'title', 'thumb_media_id', 'author', 'digest',
-                    'show_cover_pic', 'content', 'content_source_url',
-                ]);
-            }
+        $params = [
+            'articles' => array_map(function ($article) {
+                if ($article instanceof Article) {
+                    return $article->only([
+                        'title',
+                        'thumb_media_id',
+                        'author',
+                        'digest',
+                        'show_cover_pic',
+                        'content',
+                        'content_source_url',
+                    ]);
+                }
 
-            return $article;
-        }, $articles)];
+                return $article;
+            }, $articles)
+        ];
 
         return $this->parseJSON('json', [self::API_NEWS_UPLOAD, $params]);
     }
 
+
     /**
-     * Update article.
-     *
-     * @param  string $mediaId
-     * @param  array  $article
-     * @param  int    $index
-     * @return bool
+     *  Update article.
+     * @param     $mediaId
+     * @param     $article
+     * @param int $index
+     * @return \IopenWechat\Core\Collection
      */
     public function updateArticle($mediaId, $article, $index = 0)
     {
         $params = [
             'media_id' => $mediaId,
-            'index'    => $index,
+            'index' => $index,
             'articles' => isset($article['title']) ? $article : (isset($article[$index]) ? $article[$index] : []),
         ];
 
@@ -151,7 +142,7 @@ class Material extends AbstractAPI
     /**
      * Upload image for article.
      *
-     * @param  string   $path
+     * @param  string $path
      * @return string
      */
     public function uploadArticleImage($path)
@@ -162,13 +153,13 @@ class Material extends AbstractAPI
     /**
      * Fetch material.
      *
-     * @param  string  $mediaId
+     * @param  string $mediaId
      * @return mixed
      */
     public function get($appid, $mediaId)
     {
         $access_token = $this->auth->getAuthorizerToken($appid);
-        $response     = $this->getHttp()->json(self::API_GET . $access_token, ['media_id' => $mediaId]);
+        $response = $this->getHttp()->json(self::API_GET . $access_token, ['media_id' => $mediaId]);
         foreach ($response->getHeader('Content-Type') as $mime) {
             if (preg_match('/(image|video|audio)/i', $mime)) {
                 return $response->getBody();
@@ -188,11 +179,11 @@ class Material extends AbstractAPI
         return $json;
     }
 
+
     /**
-     * Delete material by media ID.
-     *
-     * @param  string $mediaId
-     * @return bool
+     *  Delete material by media ID.
+     * @param $mediaId
+     * @return \IopenWechat\Core\Collection
      */
     public function delete($mediaId)
     {
@@ -216,18 +207,19 @@ class Material extends AbstractAPI
      *   ]
      * }
      *
-     * @param  string   $type
-     * @param  int      $offset
-     * @param  int      $count
-     * @return array
+     * @param  string $type
+     * @param  int    $offset
+     * @param  int    $count
+     * @return \IopenWechat\Core\Collection
+     *
      */
     public function lists($appid, $type, $offset = 0, $count = 20)
     {
         $access_token = $this->auth->getAuthorizerToken($appid);
-        $params       = [
-            'type'   => $type,
+        $params = [
+            'type' => $type,
             'offset' => intval($offset),
-            'count'  => min(20, $count),
+            'count' => min(20, $count),
         ];
 
         return $this->parseJSON('json', [self::API_LISTS . $access_token, $params]);
@@ -236,7 +228,7 @@ class Material extends AbstractAPI
     /**
      * Get stats of materials.
      *
-     * @return array
+     * @return \IopenWechat\Core\Collection
      */
     public function stats($appid)
     {
@@ -247,9 +239,9 @@ class Material extends AbstractAPI
     /**
      * Upload material.
      *
-     * @param  string                     $type
-     * @param  string                     $path
-     * @param  array                      $form
+     * @param  string $type
+     * @param  string $path
+     * @param  array  $form
      * @throws InvalidArgumentException
      * @return string
      */
@@ -267,7 +259,7 @@ class Material extends AbstractAPI
     /**
      * Get API by type.
      *
-     * @param  string   $type
+     * @param  string $type
      * @return string
      */
     public function getAPIByType($type)

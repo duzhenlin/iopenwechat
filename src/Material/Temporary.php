@@ -18,6 +18,7 @@
  * @link      https://github.com/overtrue
  * @link      http://overtrue.me
  */
+
 namespace IopenWechat\Material;
 
 use IopenWechat\Core\AbstractAPI;
@@ -36,19 +37,21 @@ class Temporary extends AbstractAPI
      */
     protected $allowTypes = ['image', 'voice', 'video', 'thumb'];
 
-    const API_GET    = 'https://api.weixin.qq.com/cgi-bin/media/get';
+    const API_GET = 'https://api.weixin.qq.com/cgi-bin/media/get';
     const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/upload';
     protected $auth;
+
     public function __construct($auth)
     {
         $this->auth = $auth;
     }
+
     /**
      * Download temporary material.
      *
-     * @param  string                     $mediaId
-     * @param  string                     $directory
-     * @param  string                     $filename
+     * @param  string $mediaId
+     * @param  string $directory
+     * @param  string $filename
      * @throws InvalidArgumentException
      * @return string
      */
@@ -72,7 +75,7 @@ class Temporary extends AbstractAPI
     /**
      * Fetch item from WeChat server.
      *
-     * @param  string                                         $mediaId
+     * @param  string $mediaId
      * @throws \EasyWeChat\Core\Exceptions\RuntimeException
      * @return mixed
      */
@@ -84,12 +87,11 @@ class Temporary extends AbstractAPI
     }
 
     /**
-     * Upload temporary material.
-     *
-     * @param  string                                                 $type
-     * @param  string                                                 $path
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
-     * @return string
+     *  Upload temporary material.
+     * @param $type
+     * @param $path
+     * @return \IopenWechat\Core\Collection
+     * @throws InvalidArgumentException
      */
     public function upload($type, $path)
     {
@@ -104,24 +106,22 @@ class Temporary extends AbstractAPI
         return $this->parseJSON('upload', [self::API_UPLOAD, ['media' => $path], ['type' => $type]]);
     }
 
+
     /**
      * Upload image.
-     *
-     * @param  $path
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
-     * @return string
+     * @param $path
+     * @return \IopenWechat\Core\Collection
      */
     public function uploadImage($path)
     {
         return $this->upload('image', $path);
     }
 
+
     /**
      * Upload video.
-     *
-     * @param  $path
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
-     * @return string
+     * @param $path
+     * @return \IopenWechat\Core\Collection
      */
     public function uploadVideo($path)
     {
@@ -130,22 +130,19 @@ class Temporary extends AbstractAPI
 
     /**
      * Upload voice.
-     *
-     * @param  $path
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
-     * @return string
+     * @param $path
+     * @return \IopenWechat\Core\Collection
      */
     public function uploadVoice($path)
     {
         return $this->upload('voice', $path);
     }
 
+
     /**
      * Upload thumb.
-     *
-     * @param  $path
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
-     * @return string
+     * @param $path
+     * @return \IopenWechat\Core\Collection
      */
     public function uploadThumb($path)
     {

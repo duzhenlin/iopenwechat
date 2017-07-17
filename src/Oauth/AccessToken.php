@@ -34,7 +34,7 @@ class AccessToken extends AbstractAPI
     {
         $access_token = $this->getCacheHandler()->fetch($this->accessTokenCacheKey . $appid);
         if(!$access_token || $forceRefresh){
-            $access_token = $this->getAccessToken();
+            $access_token = $this->getAccessToken($appid);
         }
         return $access_token;
     }

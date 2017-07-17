@@ -5,11 +5,30 @@ use Doctrine\Common\Cache\Cache;
 use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Core\Helper\StringHelper;
 
+/**
+ * Class Api
+ * @package IopenWechat\Js
+ */
 class Api extends AbstractAPI
 {
+    /**
+     *
+     */
     const JSAPI_TICKET = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?';
+    /**
+     * @var
+     */
     protected $auth;
+    /**
+     * @var string
+     */
     protected $cacheKey = 'sinre.IopenWechat.jsapi_ticket.';
+
+    /**
+     * Api constructor.
+     * @param       $auth
+     * @param Cache $cache
+     */
     public function __construct($auth, Cache $cache)
     {
         $this->auth = $auth;
@@ -36,6 +55,11 @@ class Api extends AbstractAPI
         return $json ? json_encode($config) : $config;
     }
 
+    /**
+     * @param      $appid
+     * @param bool $forceRefresh
+     * @return false|mixed
+     */
     public function getCacheJsTicket($appid, $forceRefresh = false)
     {
         $ticket = $this->getCacheHandler()->fetch($this->cacheKey . $appid);
@@ -44,6 +68,11 @@ class Api extends AbstractAPI
         }
         return $ticket;
     }
+
+    /**
+     * @param $appid
+     * @return mixed
+     */
     protected function getJsTicket($appid)
     {
         $params = [
@@ -57,11 +86,22 @@ class Api extends AbstractAPI
         return $result['ticket'];
     }
 
+    /**
+     * @param $ticket
+     * @param $nonce
+     * @param $timestamp
+     * @param $url
+     * @return string
+     */
     protected function signature($ticket, $nonce, $timestamp, $url)
     {
         return sha1("jsapi_ticket={$ticket}&noncestr={$nonce}&timestamp={$timestamp}&url={$url}");
     }
 
+    /**
+     * @param $url
+     * @return bool|string
+     */
     protected function fixUrl($url)
     {
         $position = strpos($url, '#');
@@ -71,6 +111,13 @@ class Api extends AbstractAPI
         return $url;
     }
 
+    /**
+     * @param      $appid
+     * @param      $url
+     * @param null $noncestr
+     * @param null $timestamp
+     * @return array
+     */
     public function getJsSign($appid, $url, $noncestr = null, $timestamp = null)
     {
         $jsapi_ticket = $this->getCacheJsTicket($appid);
