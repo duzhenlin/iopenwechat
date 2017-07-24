@@ -7,9 +7,16 @@
  */
 
 namespace IopenWechat\Core\ServiceProviders;
+use IopenWechat\Notice\Notice;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
-
-class NoticeServiceProvider
+class NoticeServiceProvider  implements ServiceProviderInterface
 {
-
+    public function register(Container $pimple)
+    {
+        $pimple['notice'] = function ($pimple) {
+            return new Notice($pimple['auth']);
+        };
+    }
 }
