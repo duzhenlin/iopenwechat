@@ -6,8 +6,10 @@ use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Core\Exceptions\InvalidArgumentException;
 use IopenWechat\Core\Helper\File;
 
+
 /**
- * Class Temporary.
+ * Class Temporary
+ * @package IopenWechat\Material
  */
 class Temporary extends AbstractAPI
 {
@@ -19,24 +21,30 @@ class Temporary extends AbstractAPI
     protected $allowTypes = ['image', 'voice', 'video', 'thumb'];
 
     const API_GET = 'https://api.weixin.qq.com/cgi-bin/media/get?';
-    const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/upload';
+    const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/upload?';
     protected $auth;
 
+    /**
+     * Temporary constructor.
+     * @param $auth
+     */
     public function __construct($auth)
     {
         $this->auth = $auth;
     }
 
+
     /**
+     * 下载临时素材
      * Download temporary material.
-     *
-     * @param  string $mediaId
-     * @param  string $directory
-     * @param  string $filename
-     * @throws InvalidArgumentException
+     * @param        $appId
+     * @param        $mediaId
+     * @param        $directory
+     * @param string $filename
      * @return string
+     * @throws InvalidArgumentException
      */
-    public function download($mediaId, $directory, $filename = '')
+    public function download($appId, $mediaId, $directory, $filename = '')
     {
         if (!is_dir($directory) || !is_writable($directory)) {
             throw new InvalidArgumentException("Directory does not exist or is not writable: '$directory'.");
@@ -44,7 +52,7 @@ class Temporary extends AbstractAPI
 
         $filename = $filename ?: $mediaId;
 
-        $stream = $this->getStream($mediaId);
+        $stream = $this->getStream($appId, $mediaId);
 
         $ext = File::getStreamExt($stream);
 
@@ -55,6 +63,7 @@ class Temporary extends AbstractAPI
 
 
     /**
+     * 获取临时素材
      * Fetch item from WeChat server.
      * @param $appId
      * @param $mediaId
@@ -67,22 +76,28 @@ class Temporary extends AbstractAPI
             'access_token' => $access_token,
             'media_id' => $mediaId,
         ];
-//        $result = $this->parseJSON('get', [self::JSAPI_TICKET, $params]);
-
         $response = $this->getHttp()->get(self::API_GET, $params);
 
         return $response->getBody();
     }
 
+
     /**
-     *  Upload temporary material.
+     * 上传临时素材
+     * Upload temporary material.
+     * @param $appId
      * @param $type
      * @param $path
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
      */
-    public function upload($type, $path)
+    public function upload($appId, $type, $path)
     {
+        $access_token = $this->auth->getAuthorizerToken($appId);
+        $params = [
+            'access_token' => $access_token,
+            'type' => $type,
+        ];
         if (!file_exists($path) || !is_readable($path)) {
             throw new InvalidArgumentException("File does not exist, or the file is unreadable: '$path'");
         }
@@ -91,49 +106,54 @@ class Temporary extends AbstractAPI
             throw new InvalidArgumentException("Unsupported media type: '{$type}'");
         }
 
-        return $this->parseJSON('upload', [self::API_UPLOAD, ['media' => $path], ['type' => $type]]);
+        return $this->parseJSON('upload', [self::API_UPLOAD, ['media' => $path], $params]);
     }
 
 
     /**
+     * 上传图片
      * Upload image.
+     * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      */
-    public function uploadImage($path)
+    public function uploadImage($appId, $path)
     {
-        return $this->upload('image', $path);
+        return $this->upload($appId, 'image', $path);
     }
 
 
     /**
      * Upload video.
+     * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      */
-    public function uploadVideo($path)
+    public function uploadVideo($appId, $path)
     {
-        return $this->upload('video', $path);
+        return $this->upload($appId, 'video', $path);
     }
 
     /**
      * Upload voice.
+     * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      */
-    public function uploadVoice($path)
+    public function uploadVoice($appId, $path)
     {
-        return $this->upload('voice', $path);
+        return $this->upload($appId, 'voice', $path);
     }
 
 
     /**
      * Upload thumb.
+     * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      */
-    public function uploadThumb($path)
+    public function uploadThumb($appId, $path)
     {
-        return $this->upload('thumb', $path);
+        return $this->upload($appId, 'thumb', $path);
     }
 }
