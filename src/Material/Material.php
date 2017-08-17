@@ -19,6 +19,7 @@ class Material extends AbstractAPI
     protected $allowTypes = ['image', 'voice', 'video', 'thumb', 'news_image'];
 
     const API_GET = 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=';
+    const API_MEDIA_GET = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token=';
     const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_material';
     const API_DELETE = 'https://api.weixin.qq.com/cgi-bin/material/del_material';
     const API_STATS = 'https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=';
@@ -160,6 +161,41 @@ class Material extends AbstractAPI
     {
         $access_token = $this->auth->getAuthorizerToken($appid);
         $response = $this->getHttp()->json(self::API_GET . $access_token, ['media_id' => $mediaId]);
+        foreach ($response->getHeader('Content-Type') as $mime) {
+            if (preg_match('/(image|video|audio)/i', $mime)) {
+                return $response->getBody();
+            }
+        }
+
+        $json = $this->getHttp()->parseJSON($response);
+
+        // XXX: 微信开发这帮混蛋，尼玛文件二进制输出不带header，简直日了!!!
+        if (!$json) {
+            // $info[''] =
+            return $response->getBody();
+        }
+
+        $this->checkAndThrow($json);
+
+        return $json;
+    }
+    /**
+     * Fetch material.
+     *
+     * @param  string $mediaId
+     * @return mixed
+     */
+    public function mediaGet($appid, $mediaId)
+    {
+        $access_token = $this->auth->getAuthorizerToken($appid);
+
+
+        $params = [
+            'access_token' => $access_token,
+            'media_id' => $mediaId,
+        ];
+        $response = $this->getHttp()->get( self::API_MEDIA_GET, $params);
+//        $response = $this->getHttp()->get(self::API_MEDIA_GET . $access_token, ['media_id' => $mediaId]);
         foreach ($response->getHeader('Content-Type') as $mime) {
             if (preg_match('/(image|video|audio)/i', $mime)) {
                 return $response->getBody();
