@@ -7,7 +7,7 @@ use IopenWechat\Core\Exceptions\InvalidArgumentException;
 use IopenWechat\Message\Type\Article;
 
 /**
- * Class Material.
+ * Class Material..
  */
 class Material extends AbstractAPI
 {
