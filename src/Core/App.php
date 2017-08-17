@@ -38,6 +38,7 @@ class App extends Container
         ServiceProviders\StaffServiceProvider::class,
         ServiceProviders\MaterialServiceProvider::class,
         ServiceProviders\MenuServiceProvider::class,
+        ServiceProviders\NoticeServiceProvider::class,
     ];
 
     /**
