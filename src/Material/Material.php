@@ -191,10 +191,9 @@ class Material extends AbstractAPI
 
 
         $params = [
-            'access_token' => $access_token,
             'media_id' => $mediaId,
         ];
-        $response = $this->getHttp()->get( self::API_MEDIA_GET, $params);
+        $response = $this->getHttp()->get( self::API_MEDIA_GET. $access_token, $params);
 //        $response = $this->getHttp()->get(self::API_MEDIA_GET . $access_token, ['media_id' => $mediaId]);
         foreach ($response->getHeader('Content-Type') as $mime) {
             if (preg_match('/(image|video|audio)/i', $mime)) {
