@@ -1,24 +1,5 @@
 <?php
 
-/*
- * This file is part of the overtrue/wechat.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
-/**
- * Temporary.php.
- *
- * @author    overtrue <i@overtrue.me>
- * @copyright 2015 overtrue <i@overtrue.me>
- *
- * @link      https://github.com/overtrue
- * @link      http://overtrue.me
- */
-
 namespace IopenWechat\Material;
 
 use IopenWechat\Core\AbstractAPI;
@@ -37,7 +18,7 @@ class Temporary extends AbstractAPI
      */
     protected $allowTypes = ['image', 'voice', 'video', 'thumb'];
 
-    const API_GET = 'https://api.weixin.qq.com/cgi-bin/media/get';
+    const API_GET = 'https://api.weixin.qq.com/cgi-bin/media/get?';
     const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/upload';
     protected $auth;
 
@@ -72,16 +53,23 @@ class Temporary extends AbstractAPI
         return $filename . '.' . $ext;
     }
 
+
     /**
      * Fetch item from WeChat server.
-     *
-     * @param  string $mediaId
-     * @throws \EasyWeChat\Core\Exceptions\RuntimeException
-     * @return mixed
+     * @param $appId
+     * @param $mediaId
+     * @return \Psr\Http\Message\StreamInterface
      */
-    public function getStream($mediaId)
+    public function getStream($appId, $mediaId)
     {
-        $response = $this->getHttp()->get(self::API_GET, ['media_id' => $mediaId]);
+        $access_token = $this->auth->getAuthorizerToken($appId);
+        $params = [
+            'access_token' => $access_token,
+            'media_id' => $mediaId,
+        ];
+//        $result = $this->parseJSON('get', [self::JSAPI_TICKET, $params]);
+
+        $response = $this->getHttp()->get(self::API_GET, $params);
 
         return $response->getBody();
     }

@@ -31,6 +31,5 @@ class MaterialServiceProvider implements ServiceProviderInterface
         };
 
         $pimple['material_temporary'] = $temporary;
-        $pimple['material.temporary'] = $temporary;
     }
 }

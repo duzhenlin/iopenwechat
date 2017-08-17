@@ -179,41 +179,6 @@ class Material extends AbstractAPI
 
         return $json;
     }
-    /**
-     * Fetch material.
-     *
-     * @param  string $mediaId
-     * @return mixed
-     */
-    public function mediaGet($appid, $mediaId)
-    {
-        $access_token = $this->auth->getAuthorizerToken($appid);
-
-
-        $params = [
-            'media_id' => $mediaId,
-        ];
-        $response = $this->getHttp()->get( self::API_MEDIA_GET. $access_token, $params);
-//        $response = $this->getHttp()->get(self::API_MEDIA_GET . $access_token, ['media_id' => $mediaId]);
-        foreach ($response->getHeader('Content-Type') as $mime) {
-            if (preg_match('/(image|video|audio)/i', $mime)) {
-                return $response->getBody();
-            }
-        }
-
-        $json = $this->getHttp()->parseJSON($response);
-
-        // XXX: 微信开发这帮混蛋，尼玛文件二进制输出不带header，简直日了!!!
-        if (!$json) {
-            // $info[''] =
-            return $response->getBody();
-        }
-
-        $this->checkAndThrow($json);
-
-        return $json;
-    }
-
 
     /**
      *  Delete material by media ID.
