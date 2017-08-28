@@ -1,32 +1,20 @@
 <?php
 
-/*
- * This file is part of the overtrue/wechat.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
 
-/**
- * Menu.php.
- *
- * @author    overtrue <i@overtrue.me>
- * @copyright 2015 overtrue <i@overtrue.me>
- *
- * @link      https://github.com/overtrue
- * @link      http://overtrue.me
- */
 namespace IopenWechat\Menu;
 
 use IopenWechat\Core\AbstractAPI;
 
+
 /**
- * Class Menu.
+ * Class Menu
+ * @package IopenWechat\Menu
  */
 class Menu extends AbstractAPI
 {
+    /**
+     *
+     */
     const API_CREATE             = 'https://api.weixin.qq.com/cgi-bin/menu/create';
     const API_GET                = 'https://api.weixin.qq.com/cgi-bin/menu/get';
     const API_DELETE             = 'https://api.weixin.qq.com/cgi-bin/menu/delete';
@@ -39,10 +27,11 @@ class Menu extends AbstractAPI
     {
         $this->auth = $auth;
     }
+
     /**
      * Get all menus.
-     *
-     * @return \EasyWeChat\Support\Collection
+     * @param $appid
+     * @return \IopenWechat\Core\Collection
      */
     public function all($appid)
     {
@@ -50,10 +39,11 @@ class Menu extends AbstractAPI
         return $this->parseJSON('get', [self::API_GET, ['access_token' => $access_token]]);
     }
 
+
     /**
-     * Get current menus.
-     *
-     * @return \EasyWeChat\Support\Collection
+     *  Get current menus.
+     * @param $appid
+     * @return \IopenWechat\Core\Collection
      */
     public function current($appid)
     {
@@ -61,12 +51,12 @@ class Menu extends AbstractAPI
         return $this->parseJSON('get', [self::API_QUERY, ['access_token' => $access_token]]);
     }
 
+
     /**
      * Add menu.
-     *
-     * @param  array  $buttons
-     * @param  array  $matchRule
-     * @return bool
+     * @param array $buttons
+     * @param array $matchRule
+     * @return \IopenWechat\Core\Collection
      */
     public function add(array $buttons, array $matchRule = [])
     {
@@ -80,11 +70,11 @@ class Menu extends AbstractAPI
         return $this->parseJSON('json', [self::API_CREATE, ['button' => $buttons]]);
     }
 
+
     /**
      * Destroy menu.
-     *
-     * @param  int    $menuId
-     * @return bool
+     * @param null $menuId
+     * @return \IopenWechat\Core\Collection
      */
     public function destroy($menuId = null)
     {
@@ -95,11 +85,11 @@ class Menu extends AbstractAPI
         return $this->parseJSON('get', [self::API_DELETE]);
     }
 
+
     /**
      * Test conditional menu.
-     *
-     * @param  string $userId
-     * @return bool
+     * @param $userId
+     * @return \IopenWechat\Core\Collection
      */
     public function test($userId)
     {
