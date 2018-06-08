@@ -2,6 +2,10 @@
 
 namespace IopenWechat\Server;
 
+/**
+ * Class Wxcrypt
+ * @package IopenWechat\Server
+ */
 class Wxcrypt
 {
     private $token;
@@ -21,14 +25,15 @@ class Wxcrypt
         $this->appId = $appId;
     }
 
+
     /**
-     *验证URL
-     * @param sMsgSignature : 签名串，对应URL参数的msg_signature
-     * @param sTimeStamp : 时间戳，对应URL参数的timestamp
-     * @param sNonce : 随机串，对应URL参数的nonce
-     * @param sEchoStr : 随机串，对应URL参数的echostr
-     * @param sReplyEchoStr : 解密之后的echostr，当return返回0时有效
-     * @return：成功0，失败返回对应的错误码
+     * 验证URL
+     * @param $sMsgSignature
+     * @param $sTimeStamp
+     * @param $sNonce
+     * @param $sEchoStr
+     * @param $sReplyEchoStr
+     * @return int|mixed
      */
     public function VerifyURL($sMsgSignature, $sTimeStamp, $sNonce, $sEchoStr, &$sReplyEchoStr)
     {
@@ -178,12 +183,13 @@ class Wxcrypt
  */
 class SHA1
 {
-    /**
-     * 用SHA1算法生成安全签名
-     * @param string $token 票据
-     * @param string $timestamp 时间戳
-     * @param string $nonce 随机字符串
-     * @param string $encrypt 密文消息
+
+    /**用SHA1算法生成安全签名
+     * @param $token
+     * @param $timestamp
+     * @param $nonce
+     * @param $encrypt_msg
+     * @return array
      */
     public function getSHA1($token, $timestamp, $nonce, $encrypt_msg)
     {
@@ -193,7 +199,7 @@ class SHA1
             sort($array, SORT_STRING);
             $str = implode($array);
             return array(ErrorCode::$OK, sha1($str));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //print $e . "\n";
             return array(ErrorCode::$ComputeSignatureError, null);
         }
@@ -210,10 +216,11 @@ class SHA1
 class XMLParse
 {
 
+
     /**
      * 提取出xml数据包中的加密消息
-     * @param string $xmltext 待提取的xml字符串
-     * @return string 提取出的加密消息字符串
+     * @param $xmltext
+     * @return array
      */
     public function extract($xmltext)
     {
@@ -230,18 +237,20 @@ class XMLParse
                 $tousername = '';
             }
             return array(0, $encrypt, $tousername);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //print $e . "\n";
             return array(ErrorCode::$ParseXmlError, null, null);
         }
     }
 
+
     /**
      * 生成xml消息
-     * @param string $encrypt 加密后的消息密文
-     * @param string $signature 安全签名
-     * @param string $timestamp 时间戳
-     * @param string $nonce 随机字符串
+     * @param $encrypt
+     * @param $signature
+     * @param $timestamp
+     * @param $nonce
+     * @return string
      */
     public function generate($encrypt, $signature, $timestamp, $nonce)
     {
@@ -265,10 +274,11 @@ class PKCS7Encoder
 {
     public static $block_size = 32;
 
+
     /**
-     * 对需要加密的明文进行填充补位
-     * @param $text 需要进行填充补位操作的明文
-     * @return 补齐明文字符串
+     *  对需要加密的明文进行填充补位
+     * @param $text
+     * @return string
      */
     function encode($text)
     {
@@ -288,10 +298,11 @@ class PKCS7Encoder
         return $text . $tmp;
     }
 
+
     /**
      * 对解密后的明文进行补位删除
-     * @param decrypted 解密后的明文
-     * @return 删除填充补位后的明文
+     * @param $text
+     * @return bool|string
      */
     function decode($text)
     {
@@ -319,59 +330,52 @@ class Prpcrypt
         $this->key = base64_decode($k . "=");
     }
 
+
     /**
      * 对明文进行加密
-     * @param string $text 需要加密的明文
-     * @return string 加密后的密文
+     * @param $text
+     * @param $appid
+     * @return array
      */
     public function encrypt($text, $appid)
     {
 
         try {
             //获得16位随机字符串，填充到明文之前
+            $pkc_encoder = new PKCS7Encoder;
             $random = $this->getRandomStr();
             $text = $random . pack("N", strlen($text)) . $text . $appid;
-            // 网络字节序
-            $size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-            $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
-            $iv = substr($this->key, 0, 16);
-            //使用自定义的填充方式对明文进行补位填充
-            $pkc_encoder = new PKCS7Encoder;
             $text = $pkc_encoder->encode($text);
-            mcrypt_generic_init($module, $this->key, $iv);
-            //加密
-            $encrypted = mcrypt_generic($module, $text);
-            mcrypt_generic_deinit($module);
-            mcrypt_module_close($module);
-
+            $iv = substr($this->key, 0, 16);
+            // 网络字节序
+            $encrypted = openssl_encrypt($text, 'AES-256-CBC', $this->key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
+//            $encrypt_msg = base64_encode($encrypted);
             //print(base64_encode($encrypted));
             //使用BASE64对加密后的字符串进行编码
             return array(ErrorCode::$OK, base64_encode($encrypted));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //print $e;
             return array(ErrorCode::$EncryptAESError, null);
         }
     }
 
+
     /**
      * 对密文进行解密
-     * @param string $encrypted 需要解密的密文
-     * @return string 解密得到的明文
+     * @param $encrypted
+     * @param $appid
+     * @return array|string
      */
     public function decrypt($encrypted, $appid)
     {
         try {
             //使用BASE64对需要解密的字符串进行解码
             $ciphertext_dec = base64_decode($encrypted);
-            $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
             $iv = substr($this->key, 0, 16);
-            mcrypt_generic_init($module, $this->key, $iv);
 
-            //解密
-            $decrypted = mdecrypt_generic($module, $ciphertext_dec);
-            mcrypt_generic_deinit($module);
-            mcrypt_module_close($module);
-        } catch (Exception $e) {
+            $decrypted = openssl_decrypt($ciphertext_dec, 'AES-256-CBC', $this->key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
+
+        } catch (\Exception $e) {
             return array(ErrorCode::$DecryptAESError, null);
         }
 
@@ -389,7 +393,7 @@ class Prpcrypt
             $xml_len = $len_list[1];
             $xml_content = substr($content, 4, $xml_len);
             $from_appid = substr($content, $xml_len + 4);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //print $e;
             return array(ErrorCode::$IllegalBuffer, null);
         }
