@@ -34,24 +34,28 @@ class Auth extends AbstractAPI
 
     }
 
-    /**
-     * 获取预授权码
-     * @return mixed
-     */
-    public function getPreAuthCode()
-    {
-        $token = $this->container->access_token->getCacheToken();
-        return $this->container->autocode->getCode($token);
-    }
 
     /**
-     * 构造微信公众号授权入口
-     * @param  $redirect_uri 回调地址
+     * 获取预授权码
+     * @param bool $forceRefresh
+     * @return mixed
+     */
+    public function getPreAuthCode($forceRefresh = false)
+    {
+        $token = $this->container->access_token->getCacheToken();
+        return $this->container->autocode->getCode($token,$forceRefresh);
+    }
+
+
+    /**
+     *  构造微信公众号授权入口
+     * @param $redirect_uri
+     * @param bool $forceRefresh
      * @return string
      */
-    public function buildAuthUrl($redirect_uri)
+    public function buildAuthUrl($redirect_uri, $forceRefresh =false)
     {
-        $authcode = $this->getPreAuthCode();
+        $authcode = $this->getPreAuthCode($forceRefresh);
         $params   = [
             'component_appid' => $this->container['config']['appid'],
             'pre_auth_code'   => $authcode,
