@@ -52,7 +52,7 @@ class Oauth extends AbstractAPI
             'code' => $code,
             'grant_type' => 'authorization_code',
             'component_appid' => $this->appid,
-            'component_access_token' => $this->access_token->getCacheToken()
+             'component_access_token' => $this->access_token->getCacheToken()
         ];
         $result = $this->parseJSON('get', [self::GET_TOKEN_URL, $params]);
         if(!$result['errcode']){

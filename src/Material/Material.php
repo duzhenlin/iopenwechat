@@ -34,46 +34,49 @@ class Material extends AbstractAPI
         $this->auth = $auth;
     }
 
+
     /**
      * Upload image.
-     *
-     * @param  string $path
+     * @param $path
      * @return string
+     * @throws InvalidArgumentException
      */
     public function uploadImage($path)
     {
         return $this->uploadMedia('image', $path);
     }
 
+
     /**
      * Upload voice.
-     *
-     * @param  string $path
+     * @param $path
      * @return string
+     * @throws InvalidArgumentException
      */
     public function uploadVoice($path)
     {
         return $this->uploadMedia('voice', $path);
     }
 
+
     /**
      * Upload thumb.
-     *
-     * @param  string $path
+     * @param $path
      * @return string
+     * @throws InvalidArgumentException
      */
     public function uploadThumb($path)
     {
         return $this->uploadMedia('thumb', $path);
     }
 
+
     /**
-     * Upload video.
-     *
-     * @param  string $path
-     * @param  string $title
-     * @param  string $description
+     * @param $path
+     * @param $title
+     * @param $description
      * @return string
+     * @throws InvalidArgumentException
      */
     public function uploadVideo($path, $title, $description)
     {
@@ -140,22 +143,25 @@ class Material extends AbstractAPI
         return $this->parseJSON('json', [self::API_NEWS_UPDATE, $params]);
     }
 
+
     /**
      * Upload image for article.
-     *
-     * @param  string $path
+     * @param $path
      * @return string
+     * @throws InvalidArgumentException
      */
     public function uploadArticleImage($path)
     {
         return $this->uploadMedia('news_image', $path);
     }
 
+
     /**
      * Fetch material.
-     *
-     * @param  string $mediaId
-     * @return mixed
+     * @param $appid
+     * @param $mediaId
+     * @return bool|mixed|\Psr\Http\Message\StreamInterface
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function get($appid, $mediaId)
     {

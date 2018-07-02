@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @property  \IopenWechat\Staff\Staff $staff
  * @property  \IopenWechat\Stats\Stats $stats
  * @property  \IopenWechat\User\User $user
+ * @property  \IopenWechat\Mass\Mass $mass
  * @package IopenWechat\Core
  */
 class App extends Container
@@ -63,6 +64,7 @@ class App extends Container
         ServiceProviders\MaterialServiceProvider::class,
         ServiceProviders\MenuServiceProvider::class,
         ServiceProviders\NoticeServiceProvider::class,
+        ServiceProviders\MassServiceProvider::class,
     ];
 
     /**
