@@ -78,12 +78,25 @@ class Mass extends AbstractAPI
         return $access_token;
     }
 
+
     /**
      * @param $appId
      * @param $articles
      * @return \IopenWechat\Core\Collection
      */
     public function uploadNews($appId, $articles)
+    {
+        $access_token = $this->getAuthorizerToken($appId);
+        $params = ['articles' => $articles];
+        return $this->parseJSON('json', [self::UPLOAD_NEWS_URL . $access_token, $params]);
+    }
+
+    public function sendAll($type)
+    {
+
+    }
+
+    public function sendNewsByTags($appId, $articles, $isToAll = false)
     {
         $access_token = $this->getAuthorizerToken($appId);
         $params = ['articles' => $articles];

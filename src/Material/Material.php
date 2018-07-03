@@ -27,6 +27,7 @@ class Material extends AbstractAPI
     const API_NEWS_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_news';
     const API_NEWS_UPDATE = 'https://api.weixin.qq.com/cgi-bin/material/update_news';
     const API_NEWS_IMAGE_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg';
+    const API_NEWS_VIDEO_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadvideo';
     protected $auth;
 
     public function __construct($auth)
@@ -214,8 +215,8 @@ class Material extends AbstractAPI
      * }
      *
      * @param  string $type
-     * @param  int    $offset
-     * @param  int    $count
+     * @param  int $offset
+     * @param  int $count
      * @return \IopenWechat\Core\Collection
      *
      */
@@ -247,7 +248,7 @@ class Material extends AbstractAPI
      *
      * @param  string $type
      * @param  string $path
-     * @param  array  $form
+     * @param  array $form
      * @throws InvalidArgumentException
      * @return string
      */
@@ -273,6 +274,9 @@ class Material extends AbstractAPI
         switch ($type) {
             case 'news_image':
                 $api = self::API_NEWS_IMAGE_UPLOAD;
+                break;
+            case 'news_video':
+                $api = self::API_NEWS_VIDEO_UPLOAD;
                 break;
             default:
                 $api = self::API_UPLOAD;
