@@ -26,8 +26,8 @@ class Material extends AbstractAPI
     const API_LISTS = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=';
     const API_NEWS_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=';
     const API_NEWS_UPDATE = 'https://api.weixin.qq.com/cgi-bin/material/update_news?access_token=';
-    const API_NEWS_IMAGE_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=';
-    const API_NEWS_VIDEO_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadvideo?access_token=';
+    const API_NEWS_IMAGE_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg';
+    const API_NEWS_VIDEO_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadvideo';
     protected $auth;
 
     public function __construct($auth)
@@ -182,7 +182,7 @@ class Material extends AbstractAPI
      */
     public function get($appid, $mediaId)
     {
-        $access_token = $this->auth->getAuthorizerToken($appid);
+        $access_token = $this->getAuthorizerToken($appid);
         $response = $this->getHttp()->json(self::API_GET . $access_token, ['media_id' => $mediaId]);
         foreach ($response->getHeader('Content-Type') as $mime) {
             if (preg_match('/(image|video|audio)/i', $mime)) {
@@ -238,7 +238,7 @@ class Material extends AbstractAPI
      */
     public function lists($appid, $type, $offset = 0, $count = 20)
     {
-        $access_token = $this->auth->getAuthorizerToken($appid);
+        $access_token = $this->getAuthorizerToken($appid);
         $params = [
             'type' => $type,
             'offset' => intval($offset),
@@ -255,7 +255,7 @@ class Material extends AbstractAPI
      */
     public function stats($appid)
     {
-        $access_token = $this->auth->getAuthorizerToken($appid);
+        $access_token = $this->getAuthorizerToken($appid);
         return $this->parseJSON('get', [self::API_STATS, ['access_token' => $access_token]]);
     }
 
@@ -276,7 +276,9 @@ class Material extends AbstractAPI
 
         $form['type'] = $type;
 
-        return $this->parseJSON('upload', [$this->getAPIByType($type, $appId), ['media' => $path], $form]);
+        $queries['access_token'] = $this->getAuthorizerToken($appId);
+
+        return $this->parseJSON('upload', [$this->getAPIByType($type, $appId), ['media' => $path], $form, $queries]);
     }
 
     /**
@@ -288,18 +290,30 @@ class Material extends AbstractAPI
      */
     public function getAPIByType($type, $appId)
     {
-        $access_token = $this->auth->getAuthorizerToken($appId);
+
         switch ($type) {
             case 'news_image':
-                $api = self::API_NEWS_IMAGE_UPLOAD . $access_token;
+                $api = self::API_NEWS_IMAGE_UPLOAD;
                 break;
             case 'news_video':
-                $api = self::API_NEWS_VIDEO_UPLOAD . $access_token;
+                $api = self::API_NEWS_VIDEO_UPLOAD;
                 break;
             default:
-                $api = self::API_UPLOAD . $access_token;
+                $api = self::API_UPLOAD;
         }
 
         return $api;
+    }
+
+
+    /**
+     * @param $appid
+     * @return mixed
+     */
+    private function getAuthorizerToken($appid)
+    {
+        $access_token = $this->auth->getAuthorizerToken($appid);
+
+        return $access_token;
     }
 }
