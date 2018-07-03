@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Message;
 
 use IopenWechat\Core\Collection;
@@ -13,15 +14,15 @@ class Message extends AbstractMessage
 {
     const SUCCESS_EMPTY_RESPONSE = 'success';
 
-    const TEXT_MSG        = 2;
-    const IMAGE_MSG       = 4;
-    const VOICE_MSG       = 8;
-    const VIDEO_MSG       = 16;
+    const TEXT_MSG = 2;
+    const IMAGE_MSG = 4;
+    const VOICE_MSG = 8;
+    const VIDEO_MSG = 16;
     const SHORT_VIDEO_MSG = 32;
-    const LOCATION_MSG    = 64;
-    const LINK_MSG        = 128;
-    const EVENT_MSG       = 1048576;
-    const ALL_MSG         = 1048830;
+    const LOCATION_MSG = 64;
+    const LINK_MSG = 128;
+    const EVENT_MSG = 1048576;
+    const ALL_MSG = 1048830;
 
     protected $wxcrypt;
     protected $request;
@@ -34,21 +35,21 @@ class Message extends AbstractMessage
      * @var array
      */
     protected $messageTypeMapping = [
-        'text'       => 2,
-        'image'      => 4,
-        'voice'      => 8,
-        'video'      => 16,
+        'text' => 2,
+        'image' => 4,
+        'voice' => 8,
+        'video' => 16,
         'shortvideo' => 32,
-        'location'   => 64,
-        'link'       => 128,
-        'event'      => 1048576,
+        'location' => 64,
+        'link' => 128,
+        'event' => 1048576,
     ];
 
     public function __construct($wxcrypt, Request $request, $xml)
     {
         $this->wxcrypt = $wxcrypt;
         $this->request = $request;
-        $this->xml     = $xml;
+        $this->xml = $xml;
     }
 
     public function getMessage()
@@ -106,18 +107,18 @@ class Message extends AbstractMessage
     /**
      * Build reply XML.
      *
-     * @param  string          $to
-     * @param  string          $from
+     * @param  string $to
+     * @param  string $from
      * @param  AbstractMessage $message
      * @return string
      */
     protected function buildReply($to, $from, $message)
     {
         $base = [
-            'ToUserName'   => $to,
+            'ToUserName' => $to,
             'FromUserName' => $from,
-            'CreateTime'   => time(),
-            'MsgType'      => is_array($message) ? current($message)->getMsgType() : $message->getMsgType(),
+            'CreateTime' => time(),
+            'MsgType' => is_array($message) ? current($message)->getMsgType() : $message->getMsgType(),
         ];
 
         $transformer = new Transformer();
@@ -163,7 +164,7 @@ class Message extends AbstractMessage
     }
 
     /**
-     * @param  callable                   $callable
+     * @param  callable $callable
      * @throws InvalidArgumentException
      * @return $this
      */
@@ -173,9 +174,10 @@ class Message extends AbstractMessage
             throw new InvalidArgumentException('Argument #2 is not callable.');
         }
         $this->messageHandler = $callable;
-        $this->messageFilter  = $option;
+        $this->messageFilter = $option;
         return $this;
     }
+
     public function reply()
     {
         if ($echostr = $this->request->get('echostr')) {
@@ -188,14 +190,13 @@ class Message extends AbstractMessage
         }
 
 
-
-        $message  = $this->getMessage();
+        $message = $this->getMessage();
 
         $response = $this->handleMessage($message);
 
         $result = [
-            'to'       => $message['FromUserName'],
-            'from'     => $message['ToUserName'],
+            'to' => $message['FromUserName'],
+            'from' => $message['ToUserName'],
             'response' => $response,
         ];
 

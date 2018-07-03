@@ -6,8 +6,11 @@ use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Core\Exceptions\InvalidArgumentException;
 use IopenWechat\Message\Type\Article;
 
+
 /**
- * Class Material..
+ * Class Material
+ * @property  \IopenWechat\Auth\Auth $auth
+ * @package IopenWechat\Material
  */
 class Material extends AbstractAPI
 {

@@ -22,7 +22,7 @@ class Mass extends AbstractAPI
     /**
      *根据标签进行群发【订阅号与服务号认证后均可用】
      */
-    const SEND_MASS_ALL_URL = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?';
+    const SEND_MASS_ALL_URL = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=';
     /**
      *根据OpenID列表群发【订阅号不可用，服务号认证后可用】
      */
@@ -91,15 +91,19 @@ class Mass extends AbstractAPI
         return $this->parseJSON('json', [self::UPLOAD_NEWS_URL . $access_token, $params]);
     }
 
-    public function sendAll($type)
-    {
-
-    }
-
-    public function sendNewsByTags($appId, $articles, $isToAll = false)
+    private function sendAll($appId, $data)
     {
         $access_token = $this->getAuthorizerToken($appId);
-        $params = ['articles' => $articles];
-        return $this->parseJSON('json', [self::UPLOAD_NEWS_URL . $access_token, $params]);
+
+        return $this->parseJSON('json', [self::SEND_MASS_ALL_URL . $access_token, $data]);
+    }
+
+    public function sendNewsAll($appId, $data)
+    {
+        $params['filter'] = $data['filter'];
+        $params['mpnews']['media_id'] = $data['media_id'];
+        $params['msgtype'] = 'mpnews';
+        $params['send_ignore_reprint'] = $data['send_ignore_reprint'] !== '' ? $data['send_ignore_reprint'] : 0;
+        return $this->sendAll($appId, $params);
     }
 }

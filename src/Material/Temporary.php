@@ -9,6 +9,7 @@ use IopenWechat\Core\Helper\File;
 
 /**
  * Class Temporary
+ * @property  \IopenWechat\Auth\Auth $auth
  * @package IopenWechat\Material
  */
 class Temporary extends AbstractAPI
@@ -20,8 +21,17 @@ class Temporary extends AbstractAPI
      */
     protected $allowTypes = ['image', 'voice', 'video', 'thumb'];
 
+    /**
+     *
+     */
     const API_GET = 'https://api.weixin.qq.com/cgi-bin/media/get?';
+    /**
+     *
+     */
     const API_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/upload?';
+    /**
+     * @var
+     */
     protected $auth;
 
     /**
@@ -36,13 +46,13 @@ class Temporary extends AbstractAPI
 
     /**
      * 下载临时素材
-     * Download temporary material.
-     * @param        $appId
-     * @param        $mediaId
-     * @param        $directory
+     * @param $appId
+     * @param $mediaId
+     * @param $directory
      * @param string $filename
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function download($appId, $mediaId, $directory, $filename = '')
     {
@@ -64,10 +74,10 @@ class Temporary extends AbstractAPI
 
     /**
      * 获取临时素材
-     * Fetch item from WeChat server.
      * @param $appId
      * @param $mediaId
      * @return \Psr\Http\Message\StreamInterface
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getStream($appId, $mediaId)
     {
@@ -111,11 +121,10 @@ class Temporary extends AbstractAPI
 
 
     /**
-     * 上传图片
-     * Upload image.
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
+     * @throws InvalidArgumentException
      */
     public function uploadImage($appId, $path)
     {
@@ -124,21 +133,22 @@ class Temporary extends AbstractAPI
 
 
     /**
-     * Upload video.
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
+     * @throws InvalidArgumentException
      */
     public function uploadVideo($appId, $path)
     {
         return $this->upload($appId, 'video', $path);
     }
 
+
     /**
-     * Upload voice.
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
+     * @throws InvalidArgumentException
      */
     public function uploadVoice($appId, $path)
     {
@@ -147,10 +157,10 @@ class Temporary extends AbstractAPI
 
 
     /**
-     * Upload thumb.
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
+     * @throws InvalidArgumentException
      */
     public function uploadThumb($appId, $path)
     {
