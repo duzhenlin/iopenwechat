@@ -24,10 +24,10 @@ class Material extends AbstractAPI
     const API_DELETE = 'https://api.weixin.qq.com/cgi-bin/material/del_material';
     const API_STATS = 'https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=';
     const API_LISTS = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=';
-    const API_NEWS_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_news';
-    const API_NEWS_UPDATE = 'https://api.weixin.qq.com/cgi-bin/material/update_news';
-    const API_NEWS_IMAGE_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg';
-    const API_NEWS_VIDEO_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadvideo';
+    const API_NEWS_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=';
+    const API_NEWS_UPDATE = 'https://api.weixin.qq.com/cgi-bin/material/update_news?access_token=';
+    const API_NEWS_IMAGE_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=';
+    const API_NEWS_VIDEO_UPLOAD = 'https://api.weixin.qq.com/cgi-bin/media/uploadvideo?access_token=';
     protected $auth;
 
     public function __construct($auth)
@@ -39,47 +39,51 @@ class Material extends AbstractAPI
     /**
      * Upload image.
      * @param $path
+     * @param $appId
      * @return string
      * @throws InvalidArgumentException
      */
-    public function uploadImage($path)
+    public function uploadImage($appId, $path)
     {
-        return $this->uploadMedia('image', $path);
+        return $this->uploadMedia($appId, 'image', $path);
     }
 
 
     /**
      * Upload voice.
+     * @param $appId
      * @param $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function uploadVoice($path)
+    public function uploadVoice($appId, $path)
     {
-        return $this->uploadMedia('voice', $path);
+        return $this->uploadMedia($appId, 'voice', $path);
     }
 
 
     /**
      * Upload thumb.
+     * @param $appId
      * @param $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function uploadThumb($path)
+    public function uploadThumb($appId, $path)
     {
-        return $this->uploadMedia('thumb', $path);
+        return $this->uploadMedia($appId, 'thumb', $path);
     }
 
 
     /**
      * @param $path
+     * @param $appId
      * @param $title
      * @param $description
      * @return string
      * @throws InvalidArgumentException
      */
-    public function uploadVideo($path, $title, $description)
+    public function uploadVideo($appId, $path, $title, $description)
     {
         $params = [
             'description' => json_encode(
@@ -89,7 +93,7 @@ class Material extends AbstractAPI
                 ], JSON_UNESCAPED_UNICODE),
         ];
 
-        return $this->uploadMedia('video', $path, $params);
+        return $this->uploadMedia($appId, 'video', $path, $params);
     }
 
     /**
@@ -147,13 +151,25 @@ class Material extends AbstractAPI
 
     /**
      * Upload image for article.
+     * @param $appId
      * @param $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function uploadArticleImage($path)
+    public function uploadArticleImage($appId, $path)
     {
-        return $this->uploadMedia('news_image', $path);
+        return $this->uploadMedia($appId, 'news_image', $path);
+    }
+
+    /**
+     * @param $appId
+     * @param $path
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public function uploadArticleVidep($appId, $path)
+    {
+        return $this->uploadMedia($appId, 'news_video', $path);
     }
 
 
@@ -252,7 +268,7 @@ class Material extends AbstractAPI
      * @throws InvalidArgumentException
      * @return string
      */
-    protected function uploadMedia($type, $path, array $form = [])
+    protected function uploadMedia($appId, $type, $path, array $form = [])
     {
         if (!file_exists($path) || !is_readable($path)) {
             throw new InvalidArgumentException("File does not exist, or the file is unreadable: '$path'");
@@ -260,26 +276,28 @@ class Material extends AbstractAPI
 
         $form['type'] = $type;
 
-        return $this->parseJSON('upload', [$this->getAPIByType($type), ['media' => $path], $form]);
+        return $this->parseJSON('upload', [$this->getAPIByType($type, $appId), ['media' => $path], $form]);
     }
 
     /**
      * Get API by type.
      *
      * @param  string $type
+     * @param  string $appId
      * @return string
      */
-    public function getAPIByType($type)
+    public function getAPIByType($type, $appId)
     {
+        $access_token = $this->auth->getAuthorizerToken($appId);
         switch ($type) {
             case 'news_image':
-                $api = self::API_NEWS_IMAGE_UPLOAD;
+                $api = self::API_NEWS_IMAGE_UPLOAD . $access_token;
                 break;
             case 'news_video':
-                $api = self::API_NEWS_VIDEO_UPLOAD;
+                $api = self::API_NEWS_VIDEO_UPLOAD . $access_token;
                 break;
             default:
-                $api = self::API_UPLOAD;
+                $api = self::API_UPLOAD . $access_token;
         }
 
         return $api;
