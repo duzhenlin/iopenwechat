@@ -170,7 +170,7 @@ class Material extends AbstractAPI
      * @return string
      * @throws InvalidArgumentException
      */
-    public function uploadArticleVidep($appId, $path)
+    public function uploadArticleVideo($appId, $path)
     {
         return $this->uploadMedia($appId, 'news_video', $path);
     }
@@ -210,6 +210,7 @@ class Material extends AbstractAPI
      *  Delete material by media ID.
      * @param $mediaId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function delete($mediaId)
     {
@@ -237,6 +238,7 @@ class Material extends AbstractAPI
      * @param  int $offset
      * @param  int $count
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      *
      */
     public function lists($appid, $type, $offset = 0, $count = 20)
@@ -270,6 +272,7 @@ class Material extends AbstractAPI
      * @param  array $form
      * @throws InvalidArgumentException
      * @return string
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     protected function uploadMedia($appId, $type, $path, array $form = [])
     {
@@ -310,6 +313,7 @@ class Material extends AbstractAPI
 
 
     /**
+     * 获取公众号token
      * @param $appid
      * @return mixed
      */

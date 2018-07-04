@@ -11,7 +11,9 @@ use IopenWechat\Core\AbstractAPI;
  */
 class AccessToken extends AbstractAPI
 {
+
     /**
+     *
      * @var
      */
     protected $appid;

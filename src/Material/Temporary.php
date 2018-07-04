@@ -94,12 +94,12 @@ class Temporary extends AbstractAPI
 
     /**
      * 上传临时素材
-     * Upload temporary material.
      * @param $appId
      * @param $type
      * @param $path
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upload($appId, $type, $path)
     {
@@ -121,10 +121,12 @@ class Temporary extends AbstractAPI
 
 
     /**
+     * 上传图片
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadImage($appId, $path)
     {
@@ -133,10 +135,12 @@ class Temporary extends AbstractAPI
 
 
     /**
+     *
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadVideo($appId, $path)
     {
@@ -145,10 +149,12 @@ class Temporary extends AbstractAPI
 
 
     /**
+     *
      * @param $appId
      * @param $path
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadVoice($appId, $path)
     {
@@ -161,6 +167,7 @@ class Temporary extends AbstractAPI
      * @param $path
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadThumb($appId, $path)
     {

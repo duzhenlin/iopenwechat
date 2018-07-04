@@ -68,6 +68,7 @@ class Stats extends AbstractAPI
      * @param $from
      * @param $to
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function userSummary($appId, $from, $to)
     {
@@ -81,6 +82,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function userCumulate($appId, $from, $to)
     {
@@ -94,6 +96,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function articleSummary($appId, $from, $to)
     {
@@ -107,6 +110,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function articleTotal($appId, $from, $to)
     {
@@ -120,6 +124,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function userReadSummary($appId, $from, $to)
     {
@@ -133,6 +138,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function userReadHourly($appId, $from, $to)
     {
@@ -146,6 +152,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function userShareSummary($appId, $from, $to)
     {
@@ -159,6 +166,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function userShareHourly($appId, $from, $to)
     {
@@ -172,6 +180,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageSummary($appId, $from, $to)
     {
@@ -185,6 +194,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageHourly($appId, $from, $to)
     {
@@ -198,6 +208,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageWeekly($appId, $from, $to)
     {
@@ -211,6 +222,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageMonthly($appId, $from, $to)
     {
@@ -224,6 +236,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageDistSummary($appId, $from, $to)
     {
@@ -237,6 +250,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageDistWeekly($appId, $from, $to)
     {
@@ -250,6 +264,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function upstreamMessageDistMonthly($appId, $from, $to)
     {
@@ -263,6 +278,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function interfaceSummary($appId, $from, $to)
     {
@@ -276,6 +292,7 @@ class Stats extends AbstractAPI
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function interfaceSummaryHourly($appId, $from, $to)
     {
@@ -290,6 +307,7 @@ class Stats extends AbstractAPI
      * @param int    $condSource
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function cardSummary($appId, $from, $to, $condSource = 0)
     {
@@ -308,6 +326,7 @@ class Stats extends AbstractAPI
      * @param string $cardId
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function freeCardSummary($appId, $from, $to, $condSource = 0, $cardId = '')
     {
@@ -326,6 +345,7 @@ class Stats extends AbstractAPI
      * @param     $to
      * @param int $condSource
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function memberCardSummary($appId, $from, $to, $condSource = 0)
     {
@@ -338,12 +358,13 @@ class Stats extends AbstractAPI
 
     /**
      * 查询数据
-     * @param       $appId
-     * @param       $api
-     * @param       $from
-     * @param       $to
+     * @param $appId
+     * @param $api
+     * @param $from
+     * @param $to
      * @param array $ext
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     protected function query($appId, $api, $from, $to, array $ext = [])
     {

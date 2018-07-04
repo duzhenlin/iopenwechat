@@ -178,6 +178,11 @@ class Message extends AbstractMessage
         return $this;
     }
 
+    /**
+     * @return mixed|null|string
+     * @throws FaultException
+     * @throws InvalidArgumentException
+     */
     public function reply()
     {
         if ($echostr = $this->request->get('echostr')) {

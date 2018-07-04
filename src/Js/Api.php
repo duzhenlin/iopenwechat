@@ -41,6 +41,7 @@ class Api extends AbstractAPI
      * @param  bool           $beta
      * @param  bool           $json
      * @return array|string
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function config($appid, $url, array $APIs, $debug = false, $beta = false, $json = true)
     {
@@ -55,10 +56,12 @@ class Api extends AbstractAPI
         return $json ? json_encode($config) : $config;
     }
 
+
     /**
-     * @param      $appid
+     * @param $appid
      * @param bool $forceRefresh
      * @return false|mixed
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getCacheJsTicket($appid, $forceRefresh = false)
     {
@@ -69,9 +72,11 @@ class Api extends AbstractAPI
         return $ticket;
     }
 
+
     /**
      * @param $appid
      * @return mixed
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     protected function getJsTicket($appid)
     {
@@ -111,12 +116,14 @@ class Api extends AbstractAPI
         return $url;
     }
 
+
     /**
-     * @param      $appid
-     * @param      $url
+     * @param $appid
+     * @param $url
      * @param null $noncestr
      * @param null $timestamp
      * @return array
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getJsSign($appid, $url, $noncestr = null, $timestamp = null)
     {

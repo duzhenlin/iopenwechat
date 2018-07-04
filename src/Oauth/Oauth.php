@@ -40,10 +40,12 @@ class Oauth extends AbstractAPI
         return self::GET_CODE_URL . http_build_query($params) . '#wechat_redirect';
     }
 
+
     /**
      * @param string $appid 公众号App id
      * @param string $code 授权码
-     * @return bool|\IopenWechat\Core\Collection
+     * @return bool|Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getOauthAccessToken($appid, $code)
     {
@@ -66,11 +68,13 @@ class Oauth extends AbstractAPI
         return !$result['errcode'] ? new Collection($data) : false;
     }
 
+
     /**
      * @param $access_token
      * @param $openid
      * @param string $lang
      * @return bool|Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getOauthUserinfo($access_token, $openid, $lang = 'zh_CN')
     {

@@ -74,6 +74,10 @@ class MessageBuilder
         return $this;
     }
 
+    /**
+     * @return \IopenWechat\Core\Collection
+     * @throws RuntimeException
+     */
     public function send()
     {
         if (empty($this->message)) {

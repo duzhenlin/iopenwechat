@@ -49,6 +49,7 @@ class Member extends AbstractAPI
      * 获取授权方的公众号帐号基本信息
      * @param $authorizer_appid
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getBaseInfo($authorizer_appid)
     {
@@ -64,15 +65,13 @@ class Member extends AbstractAPI
         return $info;
     }
 
+
     /**
      * 获取授权方的选项设置信息
-     * @param string $authorizer_appid 授权方appid
-     * @param string $option_name 选项名称，location_report(地理位置上报选项)，voice_recognize（语音识别开关选项），customer_service（多客服开关选项）
-     * 对应的值含义：
-     * location_report(地理位置上报选项)    0    无上报    1    进入会话时上报    2    每5s上报
-     * voice_recognize（语音识别开关选项）    0    关闭语音识别    1    开启语音识别
-     * customer_service（多客服开关选项）    0    关闭多客服    1    开启多客服
+     * @param $authorizer_appid
+     * @param $option_name
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getSettingInfo($authorizer_appid, $option_name)
     {
@@ -99,6 +98,7 @@ class Member extends AbstractAPI
      * voice_recognize（语音识别开关选项）    0    关闭语音识别    1    开启语音识别
      * customer_service（多客服开关选项）    0    关闭多客服    1    开启多客服
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function setSettingInfo($authorizer_appid, $option_name, $option_value)
     {

@@ -11,6 +11,11 @@ namespace IopenWechat\Notice;
 use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Core\Exceptions\InvalidArgumentException;
 
+/**
+ * Class Notice
+ * @property  \IopenWechat\Auth\Auth $Auth
+ * @package IopenWechat\Notice
+ */
 class Notice extends AbstractAPI
 {
     /**
@@ -78,13 +83,13 @@ class Notice extends AbstractAPI
 
 
     /**
-     *  Set industry.
      * @param $appId
      * @param $industryOne
      * @param $industryTwo
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
-    public function setIndustry($appId,$industryOne, $industryTwo)
+    public function setIndustry($appId, $industryOne, $industryTwo)
     {
         $access_token = $this->getAuthorizerToken($appId);
         $params = [
@@ -96,9 +101,9 @@ class Notice extends AbstractAPI
 
 
     /**
-     * Get industry.
      * @param $appId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getIndustry($appId)
     {
@@ -108,12 +113,13 @@ class Notice extends AbstractAPI
 
 
     /**
-     * Add a template and get template ID.
+     *  Add a template and get template ID.
      * @param $appId
      * @param $shortId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
-    public function addTemplate($appId,$shortId)
+    public function addTemplate($appId, $shortId)
     {
         $access_token = $this->getAuthorizerToken($appId);
         $params = ['template_id_short' => $shortId];
@@ -122,9 +128,10 @@ class Notice extends AbstractAPI
 
 
     /**
+     * 获取模板
      * @param $appId
-     * Get private templates.
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getPrivateTemplates($appId)
     {
@@ -134,10 +141,11 @@ class Notice extends AbstractAPI
 
 
     /**
-     * Delete private template.
+     * 删除模板
      * @param $appId
      * @param $templateId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function deletePrivateTemplate($appId, $templateId)
     {
@@ -148,11 +156,12 @@ class Notice extends AbstractAPI
 
 
     /**
-     * Send a notice message.
+     * 发送模板消息
      * @param $appId
      * @param array $data
      * @return \IopenWechat\Core\Collection
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function send($appId, $data = [])
     {

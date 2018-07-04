@@ -9,10 +9,9 @@
 namespace IopenWechat\Mass;
 
 use IopenWechat\Core\AbstractAPI;
-use IopenWechat\Server\AccessToken;
 
 /**
- * Class Mass
+ * 群发处理类
  * @property  \IopenWechat\Auth\Auth $Auth
  * @package IopenWechat\Mass
  */
@@ -52,10 +51,11 @@ class Mass extends AbstractAPI
      */
     const SET_MASS_SPEED_URL = 'https://api.weixin.qq.com/cgi-bin/message/mass/speed/set?';
 
-    private $appid;
 
+    /**
+     * @var
+     */
     private $Auth;
-    private $access_token;
 
     /**
      * Member constructor.
@@ -64,7 +64,6 @@ class Mass extends AbstractAPI
     public function __construct($auth)
     {
         $this->Auth = $auth;
-
     }
 
     /**
@@ -80,9 +79,11 @@ class Mass extends AbstractAPI
 
 
     /**
+     * 上传图文
      * @param $appId
      * @param $articles
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadNews($appId, $articles)
     {
@@ -91,6 +92,14 @@ class Mass extends AbstractAPI
         return $this->parseJSON('json', [self::UPLOAD_NEWS_URL . $access_token, $params]);
     }
 
+
+    /**
+     * 发送处理
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
     private function sendAll($appId, $data)
     {
         $access_token = $this->getAuthorizerToken($appId);
@@ -98,12 +107,116 @@ class Mass extends AbstractAPI
         return $this->parseJSON('json', [self::SEND_MASS_ALL_URL . $access_token, $data]);
     }
 
+
+    /**
+     * 发送图文
+     *
+     *  $data = [
+     *      'filter' => [
+     *         'is_to_all' => false,
+     *          'tag_id' => 102,
+     *       ],
+     *       'media_id' => 'o4bS9MJ8MBEZP_HIGXn3IZaG_ageGD3tmnlt-hKRsWHtGOt3K-14dU_EIkGlNHkQ',
+     *       'send_ignore_reprint' => '1'
+     *   ];
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
     public function sendNewsAll($appId, $data)
     {
         $params['filter'] = $data['filter'];
         $params['mpnews']['media_id'] = $data['media_id'];
         $params['msgtype'] = 'mpnews';
         $params['send_ignore_reprint'] = $data['send_ignore_reprint'] !== '' ? $data['send_ignore_reprint'] : 0;
+        return $this->sendAll($appId, $params);
+    }
+
+
+    /**
+     * 发送文本群发
+     * $data = [
+     *      'filter' => [
+     *         'is_to_all' => false,
+     *          'tag_id' => 102,
+     *       ],
+     *       'content' => 'one day',
+     *  ];
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function sendTextAll($appId, $data)
+    {
+        $params['filter'] = $data['filter'];
+        $params['text']['content'] = $data['content'];
+        $params['msgtype'] = 'text';
+        return $this->sendAll($appId, $params);
+    }
+
+
+    /**
+     * 发送音频
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function sendVoiceAll($appId, $data)
+    {
+        $params['filter'] = $data['filter'];
+        $params['voice']['media_id'] = $data['media_id'];
+        $params['msgtype'] = 'voice';
+        return $this->sendAll($appId, $params);
+    }
+
+
+    /**
+     * 发送图片
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function sendImageAll($appId, $data)
+    {
+        $params['filter'] = $data['filter'];
+        $params['image']['media_id'] = $data['media_id'];
+        $params['msgtype'] = 'image';
+        return $this->sendAll($appId, $params);
+    }
+
+
+    /**
+     * 发送视频
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function sendVideoAll($appId, $data)
+    {
+        $params['filter'] = $data['filter'];
+        $params['mpvideo']['media_id'] = $data['media_id'];
+        $params['msgtype'] = 'mpvideo';
+        return $this->sendAll($appId, $params);
+    }
+
+
+    /**
+     *  发送卡券
+     * @param $appId
+     * @param $data
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function sendWxCardAll($appId, $data)
+    {
+        $params['filter'] = $data['filter'];
+        $params['wxcard']['card_id'] = $data['media_id'];
+        $params['msgtype'] = 'wxcard';
         return $this->sendAll($appId, $params);
     }
 }

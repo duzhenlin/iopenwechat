@@ -3,8 +3,16 @@ namespace IopenWechat\Staff;
 use IopenWechat\Message\Type\AbstractMessage;
 use IopenWechat\Message\Type\Text;
 
+/**
+ * Class Transformer
+ * @package IopenWechat\Staff
+ */
 class Transformer
 {
+    /**
+     * @param $message
+     * @return array
+     */
     public function transform($message)
     {
         if(is_array($message)){
@@ -20,6 +28,10 @@ class Transformer
         return method_exists($this, $handle) ? $this->$handle($message) : [];
     }
 
+    /**
+     * @param AbstractMessage $message
+     * @return array
+     */
     protected function transformText(AbstractMessage $message)
     {
         return [

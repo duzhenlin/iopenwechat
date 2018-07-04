@@ -6,6 +6,11 @@ use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Core\Collection;
 use Pimple\Container;
 
+/**
+ * Class EventNotice
+ * @property  \IopenWechat\Core\App $container
+ * @package IopenWechat\Server
+ */
 class EventNotice extends AbstractAPI
 {
     protected $container;

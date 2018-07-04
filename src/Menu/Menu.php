@@ -16,6 +16,9 @@ class Menu extends AbstractAPI
      *
      */
     const API_CREATE             = 'https://api.weixin.qq.com/cgi-bin/menu/create';
+    /**
+     *
+     */
     const API_GET                = 'https://api.weixin.qq.com/cgi-bin/menu/get';
     const API_DELETE             = 'https://api.weixin.qq.com/cgi-bin/menu/delete';
     const API_QUERY              = 'https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info';
@@ -28,10 +31,11 @@ class Menu extends AbstractAPI
         $this->auth = $auth;
     }
 
+
     /**
-     * Get all menus.
      * @param $appid
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function all($appid)
     {
@@ -41,9 +45,9 @@ class Menu extends AbstractAPI
 
 
     /**
-     *  Get current menus.
      * @param $appid
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function current($appid)
     {
@@ -57,6 +61,7 @@ class Menu extends AbstractAPI
      * @param array $buttons
      * @param array $matchRule
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function add(array $buttons, array $matchRule = [])
     {
@@ -75,6 +80,7 @@ class Menu extends AbstractAPI
      * Destroy menu.
      * @param null $menuId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function destroy($menuId = null)
     {
@@ -90,6 +96,7 @@ class Menu extends AbstractAPI
      * Test conditional menu.
      * @param $userId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function test($userId)
     {

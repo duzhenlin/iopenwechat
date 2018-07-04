@@ -30,6 +30,9 @@ use Symfony\Component\HttpFoundation\Request;
  * @property  \IopenWechat\Stats\Stats $stats
  * @property  \IopenWechat\User\User $user
  * @property  \IopenWechat\Mass\Mass $mass
+ *
+ * @property  \IopenWechat\Core\Helper\XmlHelper $xml
+ * @property  \Symfony\Component\HttpFoundation\Request $request
  * @package IopenWechat\Core
  */
 class App extends Container

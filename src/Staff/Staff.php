@@ -28,9 +28,11 @@ class Staff extends AbstractAPI
         return $messageBuilder->message($message);
     }
 
+
     /**
      * @param $message
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function send($message)
     {

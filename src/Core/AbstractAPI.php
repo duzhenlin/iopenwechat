@@ -44,10 +44,12 @@ abstract class AbstractAPI
         return $this->_http;
     }
 
+
     /**
-     * @param       $method
+     * @param $method
      * @param array $args
      * @return Collection
+     * @throws HttpException
      */
     public function parseJSON($method, array $args)
     {

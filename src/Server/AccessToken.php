@@ -32,9 +32,11 @@ class AccessToken extends AbstractAPI
         $this->tokenPrefix = 'sinre.IopenWechat.access_token.';
     }
 
+
     /**
      * 获取第三方平台component_access_token
-     * @return mixed|null
+     * @return mixed
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     protected function getAccessToken()
     {
@@ -55,7 +57,8 @@ class AccessToken extends AbstractAPI
     /**
      * 获取第三方平台component_access_token
      * @param  bool $forceRefresh 强制刷新
-     * @return false|mixed|null
+     * @return false|mixed
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getCacheToken($forceRefresh = false)
     {

@@ -53,6 +53,7 @@ class User extends AbstractAPI
      * @param        $openid
      * @param string $lang
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getInfo($appid, $openid, $lang = 'zh_CN')
     {
@@ -73,6 +74,7 @@ class User extends AbstractAPI
      * @param array  $openIds
      * @param string $lang
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function batchGet($appid, array $openIds, $lang = 'zh_CN')
     {
@@ -92,6 +94,7 @@ class User extends AbstractAPI
      * @param      $appid
      * @param null $nextOpenId
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function lists($appid, $nextOpenId = null)
     {
@@ -110,6 +113,7 @@ class User extends AbstractAPI
      * @param $openId
      * @param $remark
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function remark($appid, $openId, $remark)
     {

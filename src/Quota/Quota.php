@@ -1,8 +1,14 @@
 <?php
 namespace IopenWechat\Quota;
 use IopenWechat\Core\AbstractAPI;
+
 use Pimple\Container;
 
+/**
+ * Class Quota
+ * @property  \IopenWechat\Core\App $container
+ * @package IopenWechat\Quota
+ */
 class Quota extends AbstractAPI
 {
     protected $container;
@@ -15,10 +21,12 @@ class Quota extends AbstractAPI
         $this->container = $pimple;
     }
 
+
     /**
      * 第三方代公众号调用对公众号的所有API调用（包括第三方代公众号调用）次数进行清零
      * @param string $authorizer_appid 授权方appid
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function clearQuota($authorizer_appid)
     {
@@ -31,9 +39,11 @@ class Quota extends AbstractAPI
 
         return $this->parseJSON('post', [self::CLEAR_QUOTA_URL . $access_token, json_encode($params)]);
     }
+
     /**
      * 第三方平台对其所有API调用次数清零（只与第三方平台相关，与公众号无关）
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function clearAllQuota()
     {

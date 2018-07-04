@@ -18,11 +18,13 @@ class PreAuthCode extends AbstractAPI
         $this->codePrefix = 'sinre.IopenWechat.pre_auth_code.';
     }
 
+
     /**
      * 获取预授权码
      * @param string $access_token 第三方平台component_access_token
      * @param bool   $forceRefresh 是否强制刷新
-     * @return false|mixed|null
+     * @return false|mixed
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getCode($access_token, $forceRefresh = false)
     {
@@ -34,10 +36,12 @@ class PreAuthCode extends AbstractAPI
         return $preAuthCode;
     }
 
+
     /**
      * 获取预授权码
      * @param string $access_token 第三方平台component_access_token
-     * @return mixed|null
+     * @return mixed
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     protected function getPreAuthCode($access_token)
     {
