@@ -1,37 +1,43 @@
 <?php
+
 namespace IopenWechat\Core\Helper;
 
 class XmlHelper
 {
     private $_xml;
     private $_body;
+
     public function __construct()
     {
+        //禁止引用外部xml实体
+        libxml_disable_entity_loader(true);
         $this->_xml = new \XMLReader();
     }
+
     public function setXml($xml)
     {
         $this->_body = $xml;
         $this->_xml->XML($xml);
     }
+
     public function getValue($tagname)
     {
         $value = '';
-        if(!$tagname) return $value;
+        if (!$tagname) return $value;
 
         $this->setXml($this->_body);
 
-        while ($this->_xml->read()){
-            if($this->_xml->nodeType == \XMLReader::END_ELEMENT && $this->_xml->name == $tagname)
-            {
+        while ($this->_xml->read()) {
+            if ($this->_xml->nodeType == \XMLReader::END_ELEMENT && $this->_xml->name == $tagname) {
                 return $value;
             }
-            if($this->_xml->nodeType == \XMLReader::TEXT || $this->_xml->nodeType == \XMLReader::CDATA){
+            if ($this->_xml->nodeType == \XMLReader::TEXT || $this->_xml->nodeType == \XMLReader::CDATA) {
                 $value = $this->_xml->value;
             }
         }
         return '';
     }
+
     /**
      * 获取指定循环tag的数组，递归实现
      * @param string $tagname 标签名
@@ -40,26 +46,27 @@ class XmlHelper
     public function getFrame($tagname)
     {
         $frame = array();
-        if(!$tagname) return $frame;
+        if (!$tagname) return $frame;
 
-        while ($this->_xml->read()){
-            if($this->_xml->nodeType == \XMLReader::ELEMENT){
-                if(!$this->_xml->isEmptyElement && $this->_xml->name == $tagname){
+        while ($this->_xml->read()) {
+            if ($this->_xml->nodeType == \XMLReader::ELEMENT) {
+                if (!$this->_xml->isEmptyElement && $this->_xml->name == $tagname) {
                     $frame[$tagname][] = $this->getFrame($this->_xml->name);
                     $this->_xml->next();
                 }
             }
-            if($this->_xml->nodeType == \XMLReader::TEXT || $this->_xml->nodeType == \XMLReader::CDATA){
+            if ($this->_xml->nodeType == \XMLReader::TEXT || $this->_xml->nodeType == \XMLReader::CDATA) {
                 $value = $this->_xml->value;
             }
-            if($this->_xml->nodeType == \XMLReader::END_ELEMENT){
-                if($this->_xml->name == $tagname) return $frame;
+            if ($this->_xml->nodeType == \XMLReader::END_ELEMENT) {
+                if ($this->_xml->name == $tagname) return $frame;
                 $frame[$this->_xml->name] = $value;
                 $value = '';
             }
         }
         return $frame[$tagname];
     }
+
     /**
      * 获取指定循环tag的数组，非递归实现
      * @param string $tagname 标签名
@@ -69,16 +76,16 @@ class XmlHelper
     public function getFrameUnRecursive($tagname, $field = array())
     {
         $frame = array();
-        if(!$tagname) return $frame;
+        if (!$tagname) return $frame;
 
-        while ($this->_xml->read()){
-            if($this->_xml->nodeType == \XMLReader::ELEMENT && $this->_xml->name == $tagname){
+        while ($this->_xml->read()) {
+            if ($this->_xml->nodeType == \XMLReader::ELEMENT && $this->_xml->name == $tagname) {
                 $dom = $this->_xml->expand();
-                if($dom->hasChildNodes()){
+                if ($dom->hasChildNodes()) {
                     $items = array();
-                    foreach ($dom->childNodes as $c){
-                        if($c instanceof \DOMElement){
-                            if($field && is_array($field) && !in_array($c->tagName, $field)){
+                    foreach ($dom->childNodes as $c) {
+                        if ($c instanceof \DOMElement) {
+                            if ($field && is_array($field) && !in_array($c->tagName, $field)) {
                                 continue;
                             }
                             $items[$c->tagName] = $c->nodeValue;
@@ -90,6 +97,7 @@ class XmlHelper
         }
         return count($frame) > 1 ? $frame : $frame['0'];
     }
+
     public function __destruct()
     {
         $this->_xml->close();
@@ -98,7 +106,7 @@ class XmlHelper
     /**
      * XML encode.
      *
-     * @param mixed  $data
+     * @param mixed $data
      * @param string $root
      * @param string $item
      * @param string $attr
@@ -112,7 +120,8 @@ class XmlHelper
         $item = 'item',
         $attr = '',
         $id = 'id'
-    ) {
+    )
+    {
         if (is_array($attr)) {
             $_attr = [];
 
@@ -126,15 +135,16 @@ class XmlHelper
         $attr = trim($attr);
         $attr = empty($attr) ? '' : " {$attr}";
         $xml = "<{$root}{$attr}>";
-        $xml  .= self::data2Xml($data, $item, $id);
-        $xml  .= "</{$root}>";
+        $xml .= self::data2Xml($data, $item, $id);
+        $xml .= "</{$root}>";
 
         return $xml;
     }
+
     /**
      * Array to XML.
      *
-     * @param array  $data
+     * @param array $data
      * @param string $item
      * @param string $id
      *
@@ -153,7 +163,7 @@ class XmlHelper
             $xml .= "<{$key}{$attr}>";
 
             if ((is_array($val) || is_object($val))) {
-                $xml .= self::data2Xml((array) $val, $item, $id);
+                $xml .= self::data2Xml((array)$val, $item, $id);
             } else {
                 $xml .= is_numeric($val) ? $val : self::cdata($val);
             }
@@ -163,6 +173,7 @@ class XmlHelper
 
         return $xml;
     }
+
     /**
      * Build CDATA.
      *
