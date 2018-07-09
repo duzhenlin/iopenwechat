@@ -41,10 +41,11 @@ class Material extends AbstractAPI
 
     /**
      * Upload image.
-     * @param $path
      * @param $appId
+     * @param $path
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadImage($appId, $path)
     {
@@ -58,6 +59,7 @@ class Material extends AbstractAPI
      * @param $path
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadVoice($appId, $path)
     {
@@ -71,6 +73,7 @@ class Material extends AbstractAPI
      * @param $path
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadThumb($appId, $path)
     {
@@ -85,6 +88,7 @@ class Material extends AbstractAPI
      * @param $description
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadVideo($appId, $path, $title, $description)
     {
@@ -99,14 +103,17 @@ class Material extends AbstractAPI
         return $this->uploadMedia($appId, 'video', $path, $params);
     }
 
+
     /**
      * Upload articles.
-     *
-     * @param  array|Article $articles
-     * @return string
+     * @param $appid
+     * @param $articles
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
-    public function uploadArticle($articles)
+    public function uploadArticle($appid, $articles)
     {
+        $access_token = $this->getAuthorizerToken($appid);
         if (!empty($articles['title']) || $articles instanceof Article) {
             $articles = [$articles];
         }
@@ -129,7 +136,7 @@ class Material extends AbstractAPI
             }, $articles)
         ];
 
-        return $this->parseJSON('json', [self::API_NEWS_UPLOAD, $params]);
+        return $this->parseJSON('json', [self::API_NEWS_UPLOAD . $access_token, $params]);
     }
 
 
@@ -139,6 +146,7 @@ class Material extends AbstractAPI
      * @param     $article
      * @param int $index
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function updateArticle($mediaId, $article, $index = 0)
     {
@@ -158,6 +166,7 @@ class Material extends AbstractAPI
      * @param $path
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadArticleImage($appId, $path)
     {
@@ -169,6 +178,7 @@ class Material extends AbstractAPI
      * @param $path
      * @return string
      * @throws InvalidArgumentException
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function uploadArticleVideo($appId, $path)
     {
@@ -257,6 +267,7 @@ class Material extends AbstractAPI
      * Get stats of materials.
      *
      * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function stats($appid)
     {
