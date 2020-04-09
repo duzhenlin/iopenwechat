@@ -3,6 +3,7 @@
 namespace IopenWechat\Server;
 
 use IopenWechat\Core\AbstractAPI;
+use IopenWechat\Core\App;
 use IopenWechat\Core\Collection;
 use Pimple\Container;
 
@@ -26,9 +27,9 @@ class EventNotice extends AbstractAPI
      */
     public function notice()
     {
-        $result = '';
+        $result     = '';
         $decryptMsg = '';
-        $errCode = $this->container->wxcrypt->decryptMsg(
+        $errCode    = $this->container->wxcrypt->decryptMsg(
             $this->container->request->get('msg_signature'),
             $this->container->request->get('timestamp'),
             $this->container->request->get('nonce'),
@@ -37,10 +38,10 @@ class EventNotice extends AbstractAPI
         );
         if (!$errCode) {//成功解密
             $this->container->xml->setXml($decryptMsg);
-            $infoType = $this->container->xml->getValue('InfoType');
+            $infoType     = $this->container->xml->getValue('InfoType');
             $xmlTimestamp = $this->container->xml->getValue('CreateTime');
             if (method_exists($this, $infoType)) {
-                $result = $this->$infoType($infoType);
+                $result               = $this->$infoType($infoType);
                 $result['createTime'] = $xmlTimestamp;
             };
             $result = $result ?: true;
@@ -57,12 +58,12 @@ class EventNotice extends AbstractAPI
      */
     protected function component_verify_ticket($infoType)
     {
-        $cacheKey = $this->container['config']['ticketKey'] . $this->container['config']['appid'];
+        $cacheKey              = $this->container['config']['ticketKey'] . $this->container['config']['appid'];
         $ComponentVerifyTicket = $this->container->xml->getValue('ComponentVerifyTicket');
         $this->container->cache->save($cacheKey, $ComponentVerifyTicket);
         return new Collection([
             'infoType' => $infoType,
-            'echostr' => 'success',
+            'echostr'  => 'success',
         ]);
     }
 
@@ -75,7 +76,7 @@ class EventNotice extends AbstractAPI
     {
         $authorizerAppid = $this->container->xml->getValue('AuthorizerAppid');
         return new Collection([
-            'infoType' => $infoType,
+            'infoType'        => $infoType,
             'authorizerAppid' => $authorizerAppid,
         ]);
     }

@@ -10,28 +10,29 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class App
- * @property  \IopenWechat\Auth\Auth $auth 授权部分接口
- * @property  \IopenWechat\Authorizer\Member $member 用户部分接口
- * @property  \IopenWechat\Auth\AccessToken $authorizer_access_token 授权部分接口
- * @property  \IopenWechat\Js\API $jsapi JSSDK
- * @property  \IopenWechat\Material\Material $material 素材管理
- * @property  \IopenWechat\Material\Temporary $material_temporary 临时素材管理
- * @property  \IopenWechat\Menu\Menu $menu 菜单管理
- * @property  \IopenWechat\Message\Message $message 消息管理
- * @property  \IopenWechat\Notice\notice $notice 通知管理
- * @property  \IopenWechat\Oauth\Oauth $oauth
- * @property  \IopenWechat\Oauth\AccessToken $oauth_access_token
- * @property  \IopenWechat\Quota\Quota $quota
- * @property  \IopenWechat\Server\AccessToken $access_token
- * @property  \IopenWechat\Server\Wxcrypt $wxcrypt
- * @property  \IopenWechat\Server\PreAuthCode $autocode
- * @property  \IopenWechat\Server\EventNotice $event
- * @property  \IopenWechat\Staff\Staff $staff
- * @property  \IopenWechat\Stats\Stats $stats
- * @property  \IopenWechat\User\User $user
- * @property  \IopenWechat\Mass\Mass $mass
+ * @property  \IopenWechat\Auth\Auth                    $auth                    授权部分接口
+ * @property  \IopenWechat\Authorizer\Member            $member                  用户部分接口
+ * @property  \IopenWechat\Auth\AccessToken             $authorizer_access_token 授权部分接口
+ * @property  \IopenWechat\Js\API                       $jsapi                   JSSDK
+ * @property  \IopenWechat\Material\Material            $material                素材管理
+ * @property  \IopenWechat\Material\Temporary           $material_temporary      临时素材管理
+ * @property  \IopenWechat\Menu\Menu                    $menu                    菜单管理
+ * @property  \IopenWechat\Message\Message              $message                 消息管理
+ * @property  \IopenWechat\Notice\notice                $notice                  通知管理
+ * @property  \IopenWechat\Oauth\Oauth                  $oauth
+ * @property  \IopenWechat\Oauth\AccessToken            $oauth_access_token
+ * @property  \IopenWechat\Quota\Quota                  $quota
+ * @property  \IopenWechat\Server\AccessToken           $access_token
+ * @property  \IopenWechat\Server\Wxcrypt               $wxcrypt
+ * @property  \IopenWechat\Server\PreAuthCode           $autocode
+ * @property  \IopenWechat\Server\EventNotice           $event
+ * @property  \IopenWechat\Staff\Staff                  $staff
+ * @property  \IopenWechat\Stats\Stats                  $stats
+ * @property  \IopenWechat\User\User                    $user
+ * @property  \IopenWechat\Mass\Mass                    $mass
+ * @property  CacheInterface                            $cache
  *
- * @property  \IopenWechat\Core\Helper\XmlHelper $xml
+ * @property  \IopenWechat\Core\Helper\XmlHelper        $xml
  * @property  \Symfony\Component\HttpFoundation\Request $request
  * @package IopenWechat\Core
  */
@@ -79,9 +80,9 @@ class App extends Container
     {
         parent::__construct();
 
-        $config = $this->filterConfig($config);
+        $config              = $this->filterConfig($config);
         $config['ticketKey'] = 'sinre.openwechat.verifyticket.';
-        $this['config'] = function () use ($config) {
+        $this['config']      = function () use ($config) {
             return new Config($config);
         };
 

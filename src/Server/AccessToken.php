@@ -25,11 +25,11 @@ class AccessToken extends AbstractAPI
      */
     public function __construct($appId, $secret, Cache $cache = null, $cacheKey = null)
     {
-        $this->appId = $appId;
-        $this->secret = $secret;
-        $this->cache = $cache;
+        $this->appId          = $appId;
+        $this->secret         = $secret;
+        $this->cache          = $cache;
         $this->ticketCacheKey = $cacheKey;
-        $this->tokenPrefix = 'sinre.IopenWechat.access_token.';
+        $this->tokenPrefix    = 'sinre.IopenWechat.access_token.';
     }
 
 
@@ -40,9 +40,9 @@ class AccessToken extends AbstractAPI
      */
     protected function getAccessToken()
     {
-        $params = [
-            'component_appid' => $this->appId,
-            'component_appsecret' => $this->secret,
+        $params       = [
+            'component_appid'         => $this->appId,
+            'component_appsecret'     => $this->secret,
             'component_verify_ticket' => $this->getCacheHandler()->fetch($this->ticketCacheKey),
         ];
         $access_token = $this->parseJSON('post', [self::COMPONENT_ACCESS_TOKEN, json_encode($params)]);
@@ -56,13 +56,13 @@ class AccessToken extends AbstractAPI
 
     /**
      * 获取第三方平台component_access_token
-     * @param  bool $forceRefresh 强制刷新
+     * @param bool $forceRefresh 强制刷新
      * @return false|mixed
      * @throws \IopenWechat\Core\Exceptions\HttpException
      */
     public function getCacheToken($forceRefresh = false)
     {
-        $cacheKey = $this->tokenPrefix . $this->appId;
+        $cacheKey     = $this->tokenPrefix . $this->appId;
         $access_token = $this->getCacheHandler()->fetch($cacheKey);
 
         if (!$access_token || $forceRefresh) {

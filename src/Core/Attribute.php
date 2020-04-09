@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Core;
 
 abstract class Attribute extends Collection

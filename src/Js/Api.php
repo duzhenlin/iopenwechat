@@ -1,4 +1,5 @@
 <?php
+
 namespace IopenWechat\Js;
 
 use Doctrine\Common\Cache\Cache;
@@ -33,13 +34,14 @@ class Api extends AbstractAPI
     {
         $this->auth = $auth;
     }
+
     /**
      * Get config json for jsapi.
      *
-     * @param  array          $APIs
-     * @param  bool           $debug
-     * @param  bool           $beta
-     * @param  bool           $json
+     * @param array $APIs
+     * @param bool  $debug
+     * @param bool  $beta
+     * @param bool  $json
      * @return array|string
      * @throws \IopenWechat\Core\Exceptions\HttpException
      */
@@ -47,7 +49,7 @@ class Api extends AbstractAPI
     {
         $signPackage = $this->getJsSign($appid, $url);
 
-        $base = [
+        $base   = [
             'debug' => $debug,
             'beta'  => $beta,
         ];
@@ -58,7 +60,7 @@ class Api extends AbstractAPI
 
 
     /**
-     * @param $appid
+     * @param      $appid
      * @param bool $forceRefresh
      * @return false|mixed
      * @throws \IopenWechat\Core\Exceptions\HttpException
@@ -118,8 +120,8 @@ class Api extends AbstractAPI
 
 
     /**
-     * @param $appid
-     * @param $url
+     * @param      $appid
+     * @param      $url
      * @param null $noncestr
      * @param null $timestamp
      * @return array
