@@ -48,6 +48,7 @@ class App extends Container
         'encodingAesKey',
         'cache_dir',
         'appsecret',
+        'cache'
     ];
     /**
      * Service Providers.
