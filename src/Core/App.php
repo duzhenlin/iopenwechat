@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @property  \IopenWechat\User\User                    $user
  * @property  \IopenWechat\Mass\Mass                    $mass
  * @property  CacheInterface                            $cache
+ * @property  \IopenWechat\Qrcode\Qrcode                $qr_code
  *
  * @property  \IopenWechat\Core\Helper\XmlHelper        $xml
  * @property  \Symfony\Component\HttpFoundation\Request $request
@@ -70,6 +71,7 @@ class App extends Container
         ServiceProviders\MenuServiceProvider::class,
         ServiceProviders\NoticeServiceProvider::class,
         ServiceProviders\MassServiceProvider::class,
+        ServiceProviders\QrcodeServiceProvider::class
     ];
 
     /**

@@ -1,11 +1,18 @@
 <?php
+/**
+ * Created by PhpStorm
+ * Author: duzhenlin
+ * email: duzhenlin@vip.qq.com
+ * Date: 2020/4/10
+ * Time: 8:12
+ */
 
 
 namespace IopenWechat\Qrcode;
 
 use IopenWechat\Core\AbstractAPI;
 use IopenWechat\Core\App;
-use phpDocumentor\Reflection\Types\String_;
+use Pimple\Container;
 
 /**
  * Class Qrcode
@@ -58,9 +65,9 @@ class Qrcode extends AbstractAPI
 
     /**
      * Qrcode constructor.
-     * @param App $pimple
+     * @param Container $pimple
      */
-    public function __construct(App $pimple)
+    public function __construct(Container $pimple)
     {
         $this->container = $pimple;
     }
