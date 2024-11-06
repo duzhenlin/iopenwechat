@@ -19,7 +19,7 @@
     "ext-openssl": "*",
     "pimple/pimple": "~3.0",
     "doctrine/cache": "^1.0",
-    "symfony/http-foundation": "~2.6|~2.7|~2.8|~3.0",
+    "symfony/http-foundation": "^5.4.46",
     "guzzlehttp/guzzle": "~6.2.1"
   },
   "require-dev": {
