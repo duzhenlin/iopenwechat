@@ -71,7 +71,8 @@ class App extends Container
         ServiceProviders\MenuServiceProvider::class,
         ServiceProviders\NoticeServiceProvider::class,
         ServiceProviders\MassServiceProvider::class,
-        ServiceProviders\QrcodeServiceProvider::class
+        ServiceProviders\QrcodeServiceProvider::class,
+        ServiceProviders\CommentsServiceProvider::class
     ];
 
     /**
