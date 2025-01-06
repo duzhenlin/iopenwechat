@@ -1,5 +1,6 @@
 {
   "name": "duzhenlin/iopenwechat",
+  "version": "1.2.7",
   "description": "微信开放平台",
   "keywords": [
     "wechat",
