@@ -1,6 +1,6 @@
 {
   "name": "duzhenlin/iopenwechat",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "微信开放平台",
   "keywords": [
     "wechat",
@@ -16,12 +16,12 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0",
+    "php": ">=7.3",
     "ext-openssl": "*",
     "pimple/pimple": "~3.0",
     "doctrine/cache": "^1.0",
-    "symfony/http-foundation": "~2.6|~2.7|~2.8|~3.0",
-    "guzzlehttp/guzzle": "~6.2.1"
+    "symfony/http-foundation": "^5.4.50",
+    "guzzlehttp/guzzle": "^6.5.8"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",

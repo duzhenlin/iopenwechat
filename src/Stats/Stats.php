@@ -22,6 +22,14 @@ class Stats extends AbstractAPI
     const  API_ARTICLE_SUMMARY = 'https://api.weixin.qq.com/datacube/getarticlesummary';
     // 获取图文群发总数据
     const  API_ARTICLE_TOTAL = 'https://api.weixin.qq.com/datacube/getarticletotal';
+    // 获取发表内容概况总数据。微信已下线旧 getarticlesummary，后续账号维度图文概况使用该新接口。
+    const  API_BIZ_SUMMARY = 'https://api.weixin.qq.com/datacube/getbizsummary';
+    // 获取发表内容发表详细数据。微信已下线旧 getarticletotal，后续文章维度明细使用该新接口。
+    const  API_ARTICLE_TOTAL_DETAIL = 'https://api.weixin.qq.com/datacube/getarticletotaldetail';
+    // 获取发表内容每日阅读数据。该接口用于补充阅读来源明细，默认队列暂不调用。
+    const  API_ARTICLE_READ = 'https://api.weixin.qq.com/datacube/getarticleread';
+    // 获取发表内容每日分享数据。该接口用于补充分享明细，默认队列暂不调用。
+    const  API_ARTICLE_SHARE = 'https://api.weixin.qq.com/datacube/getarticleshare';
     // 获取图文统计数据
     const  API_USER_READ_SUMMARY = 'https://api.weixin.qq.com/datacube/getuserread';
     // 获取图文统计分时数据
@@ -115,6 +123,79 @@ class Stats extends AbstractAPI
     public function articleTotal($appId, $from, $to)
     {
         return $this->query($appId, self::API_ARTICLE_TOTAL, $from, $to);
+    }
+
+    /**
+     * 获取发表内容概况总数据.
+     *
+     * 这是微信 2026 新增/调整后的图文统计接口之一，用于替代已下线的
+     * getarticlesummary。返回的是账号维度的汇总口径，不再完全等同旧接口字段。
+     *
+     * @param        $appId
+     * @param string $from
+     * @param string $to
+     *
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function bizSummary($appId, $from, $to)
+    {
+        return $this->query($appId, self::API_BIZ_SUMMARY, $from, $to);
+    }
+
+    /**
+     * 获取发表内容发表详细数据.
+     *
+     * 这是微信 2026 新增/调整后的文章维度明细接口，用于替代已下线的
+     * getarticletotal。新接口返回 detail_list、read_user、share_user、
+     * collection_user 等新口径字段，调用方需要按新字段入库。
+     *
+     * @param        $appId
+     * @param string $from
+     * @param string $to
+     *
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function articleTotalDetail($appId, $from, $to)
+    {
+        return $this->query($appId, self::API_ARTICLE_TOTAL_DETAIL, $from, $to);
+    }
+
+    /**
+     * 获取发表内容每日阅读数据.
+     *
+     * 默认统计队列先以 articleTotalDetail 作为文章明细主数据源；该方法保留给
+     * 后续需要单独拉取阅读来源明细时使用。
+     *
+     * @param        $appId
+     * @param string $from
+     * @param string $to
+     *
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function articleRead($appId, $from, $to)
+    {
+        return $this->query($appId, self::API_ARTICLE_READ, $from, $to);
+    }
+
+    /**
+     * 获取发表内容每日分享数据.
+     *
+     * 默认统计队列先以 articleTotalDetail 作为文章明细主数据源；该方法保留给
+     * 后续需要单独拉取分享明细时使用。
+     *
+     * @param        $appId
+     * @param string $from
+     * @param string $to
+     *
+     * @return \IopenWechat\Core\Collection
+     * @throws \IopenWechat\Core\Exceptions\HttpException
+     */
+    public function articleShare($appId, $from, $to)
+    {
+        return $this->query($appId, self::API_ARTICLE_SHARE, $from, $to);
     }
 
     /**
