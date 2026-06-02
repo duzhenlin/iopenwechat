@@ -4,6 +4,7 @@ namespace IopenWechat\Auth;
 
 use Doctrine\Common\Cache\Cache;
 use IopenWechat\Core\AbstractAPI;
+use IopenWechat\Core\Exceptions\HttpException;
 
 /**
  * Class AccessToken
@@ -56,7 +57,12 @@ class AccessToken extends AbstractAPI
         if ($authorizer_access_token) {
             $this->getCacheHandler()->save($this->accessTokenPrefix . $authorizer_appid, $authorizer_access_token, $expire_in - 1500);
         }
-        $this->getCacheHandler()->save($this->refreshTokenPrefix . $authorizer_appid, $authorizer_refresh_token, 0);
+
+        // authorizer_refresh_token 是授权方长期刷新凭据，不能被 null/false/空字符串覆盖。
+        // 一旦被空值污染，后续刷新 authorizer_access_token 会向微信发送非法参数并触发 47001。
+        if (is_string($authorizer_refresh_token) && $authorizer_refresh_token !== '') {
+            $this->getCacheHandler()->save($this->refreshTokenPrefix . $authorizer_appid, $authorizer_refresh_token, 0);
+        }
     }
 
     /**
@@ -83,10 +89,17 @@ class AccessToken extends AbstractAPI
      */
     protected function getAccessToken($authorizer_appid, $access_token)
     {
+        $refreshToken = $this->getCacheHandler()->fetch($this->refreshTokenPrefix . $authorizer_appid);
+        if (!is_string($refreshToken) || $refreshToken === '') {
+            // 缺少 authorizer_refresh_token 时重试无法恢复，只能重新授权或从备份恢复刷新令牌。
+            // 这里提前拦截，避免把 false 发给微信导致误判为统计接口参数 47001。
+            throw new HttpException('授权方刷新令牌缺失，请重新授权公众号：' . $authorizer_appid);
+        }
+
         $params = [
             'component_appid'          => $this->appid,
             'authorizer_appid'         => $authorizer_appid,
-            'authorizer_refresh_token' => $this->getCacheHandler()->fetch($this->refreshTokenPrefix . $authorizer_appid),
+            'authorizer_refresh_token' => $refreshToken,
         ];
 
         $token = $this->parseJSON('post', [self::AUTHORIZER_TOKEN_URL . $access_token, json_encode($params)]);

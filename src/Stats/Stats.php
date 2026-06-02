@@ -18,9 +18,9 @@ class Stats extends AbstractAPI
     const  API_USER_SUMMARY = 'https://api.weixin.qq.com/datacube/getusersummary';
     // 获取累计用户数据
     const  API_USER_CUMULATE = 'https://api.weixin.qq.com/datacube/getusercumulate';
-    // 获取图文群发每日数据
+    // 获取图文群发每日数据。微信已下线该旧接口，保留常量仅用于兼容历史代码。
     const  API_ARTICLE_SUMMARY = 'https://api.weixin.qq.com/datacube/getarticlesummary';
-    // 获取图文群发总数据
+    // 获取图文群发总数据。微信已下线该旧接口，保留常量仅用于兼容历史代码。
     const  API_ARTICLE_TOTAL = 'https://api.weixin.qq.com/datacube/getarticletotal';
     // 获取发表内容概况总数据。微信已下线旧 getarticlesummary，后续账号维度图文概况使用该新接口。
     const  API_BIZ_SUMMARY = 'https://api.weixin.qq.com/datacube/getbizsummary';
@@ -99,12 +99,17 @@ class Stats extends AbstractAPI
 
     /**
      * 获取图文群发每日数据.
+     *
+     * 微信已下线 getarticlesummary，继续调用会返回接口下线类错误。
+     * 新代码不要再使用该方法；账号维度图文概况请改用 bizSummary()。
+     *
      * @param        $appId
      * @param string $from
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
      * @throws \IopenWechat\Core\Exceptions\HttpException
+     * @deprecated 微信已下线 getarticlesummary，请改用 bizSummary()。
      */
     public function articleSummary($appId, $from, $to)
     {
@@ -113,12 +118,17 @@ class Stats extends AbstractAPI
 
     /**
      * 获取图文群发总数据.
+     *
+     * 微信已下线 getarticletotal，继续调用会返回接口下线类错误。
+     * 新代码不要再使用该方法；文章维度明细请改用 articleTotalDetail()。
+     *
      * @param        $appId
      * @param string $from
      * @param string $to
      *
      * @return \IopenWechat\Core\Collection
      * @throws \IopenWechat\Core\Exceptions\HttpException
+     * @deprecated 微信已下线 getarticletotal，请改用 articleTotalDetail()。
      */
     public function articleTotal($appId, $from, $to)
     {
